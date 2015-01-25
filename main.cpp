@@ -1,8 +1,13 @@
 #include "main.hpp"
 
 int main(){
+    /*system("cd ../../"); // On se remet dans le root
+    system("tree .");
+    system("pause");*/
+
     // Main Inits
     Env env;
+    SoundManager SM;
 
     // Win32 inits
     env.cI=GetStdHandle(STD_INPUT_HANDLE);
@@ -55,16 +60,16 @@ int main(){
             charPos.Y+=rand()%(bufSize.Y-3);
             FillConsoleOutputCharacter(env.cO, '0'+rand()%10, 1, charPos, NULL);
         }
-        Sleep(100);
+       sf::sleep(sf::milliseconds(50));
     }
     system("cls");
     cout << "Automaticly switched language to: Frremçèh" << endl << endl;
     setCCol(7);
-    Sleep(2000);
+    Sleep(1000+rand()%1000);
     do{
         cout << "Vautre heedantiphyam : ";
         env.userName=basicInput();
-        ifstream fPswd("root/layGen/" + env.userName + "/password.ksh");
+        ifstream fPswd("laYgen/" + env.userName + "/password.ksh");
         if(fPswd){
             string truePswd, userPswd;
             fPswd >> truePswd;
@@ -79,7 +84,7 @@ int main(){
         }
     }while(env.userName.empty());
 
-    env.cwd="|layGen|" + env.userName + "|médocs";
+    env.cwd="|laYgen|" + env.userName + "|médocs";
     setCCol(3 | FOREGROUND_INTENSITY);
     cout << endl << "Bhyaimveunuhe " << env.userName << " !" << endl;
     cout << "Chayl spayssyalysay en kikoOscript v. 0.1" << endl;
@@ -107,18 +112,38 @@ int main(){
             }else{
                 cout << "Koman tahe ooblyay un daussyay !" << endl;
             }
-        }
-        else if(env.cmd=="ls"){
+        }else if(env.cmd=="ls"){
+            SM.say("Ben alors la machine a vapeur elle devrait traverser les crans. Sauf que la SNCF est encore en graive. Salauds de pauvres !");
+            //SM.say("Woufwouwouwouwouwfoufw ah"); On dirait Fak u Gooby
+            //SM.say("Bien le bonjour les gens.");
+        }else if(env.cmd=="sl"){
             cout << "Des trucs" << endl;
             cout << "Probablement d'autres trucs..." << endl;
             cout << "Et, de sûr, encore d'autres trucs." << endl;
         }else if(env.cmd=="sleep"){
+            char* phrases[]={
+                "J'me taperais bien une p'tite sieste.",
+                "Regardez tous ces gens trop contents !",
+                "J'allions me suicider. Parce que pour dormir c'est top."
+            };
+            SM.say(phrases[rand()%3]);
             setCCol(FOREGROUND_GREEN | FOREGROUND_RED);
             cout << "Livre dort :" << endl;
             setCCol(7);
             cout << "- EKShellent !" << endl << "   Jerry Traifaur" << endl;
             cout << "- Au moins ça plante moins que Windows." << endl << "   Roger Toukompry" << endl;
             cout << "- anph1 hum os adap t o jem naurmo" << endl << "   Jean-Kévin Kikoo" << endl;
+            cout << "- Mais K(ikooSh)ell m*rde !" << endl << "   Un rageux." << endl;
+
+        // Reste à unifier les exécutables, ou balancer la commande dans le vide, si Windows le fait
+        }else if(env.cmd=="GraphicalShit"){
+            if(env.args.size()){
+                ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , env.args[0].c_str(), NULL, NULL);
+                SM.say("Quand sa aura fini faudra faire deux fois Windows+D, sinon les gens ils vont avoir peur !"); // Le plus devient un "p'cent"
+            }else{
+                ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , NULL, NULL, NULL);
+                cout << "Spécifiez un nombre pour plus de fun !" << endl;
+            }
         }else if(env.userName==env.cmd){
             cout << "Bravo, ça c'est ton nom d'utilisateur." << endl;
         }else if(env.cmd!="quit"){
@@ -127,6 +152,13 @@ int main(){
     }while(env.cmd!="quit");
 
     cout << "Quittance..." << endl;
-    Sleep(2000+rand()%1000);
+    char* phrasesFin[]={
+        "C'est triste que vous partiez dayja. Gertrude avait fait des patates.",
+        "Attention aux poules dans le champ derriere la ferme. Elles n'ont pas ete traites.",
+        "De toutes fassons je vous aimais pas."
+    };
+    SM.say(phrasesFin[rand()%3]);
+    sf::sleep(sf::seconds(5));
+
     return 0;
 }

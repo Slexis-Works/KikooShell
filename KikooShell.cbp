@@ -8,6 +8,7 @@
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/KikooShell" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/Release/root" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -17,6 +18,7 @@
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/KikooShell" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/Release/root" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -32,7 +34,20 @@
 			<Add option="-std=c++11" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add directory="C:/Documents and Settings/alexis/Mes documents/scripts/libs/SFML-2.2/include" />
 		</Compiler>
+		<Linker>
+			<Add library="sfml-network" />
+			<Add library="sfml-audio" />
+			<Add library="sfml-system" />
+			<Add library="ws2_32" />
+			<Add library="winmm" />
+			<Add library="openal32" />
+			<Add library="sndfile" />
+			<Add library="wininet" />
+			<Add library="crypt32" />
+			<Add directory="C:/Documents and Settings/alexis/Mes documents/scripts/libs/SFML-2.2/lib" />
+		</Linker>
 		<Unit filename="inputFuncs.cpp" />
 		<Unit filename="inputFuncs.hpp" />
 		<Unit filename="main.cpp" />
@@ -40,6 +55,8 @@
 		<Unit filename="mainStructs.hpp" />
 		<Unit filename="outputFuncs.cpp" />
 		<Unit filename="outputFuncs.hpp" />
+		<Unit filename="son.cpp" />
+		<Unit filename="son.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

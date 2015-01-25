@@ -1,0 +1,293 @@
+# depslib dependency file v1.0
+1421850748 source:c:\documents and settings\alexis\mes documents\scripts\c\swagshell\main.cpp
+	"main.hpp"
+
+1421847292 c:\documents and settings\alexis\mes documents\scripts\c\swagshell\main.hpp
+	<iostream>
+	<fstream>
+	<windows.h>
+
+1421857676 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\outputfuncs.cpp
+	"outputFuncs.hpp"
+
+1422180175 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\outputfuncs.hpp
+	<windows.h>
+	"mainStructs.hpp"
+
+1422211182 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\main.cpp
+	"main.hpp"
+
+1422180631 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\main.hpp
+	<iostream>
+	<fstream>
+	<windows.h>
+	<random>
+	<time.h>
+	<string>
+	"mainStructs.hpp"
+	"outputFuncs.hpp"
+	"inputFuncs.hpp"
+	"son.hpp"
+
+1421862279 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\mainstructs.hpp
+	<windows.h>
+	<string>
+	<vector>
+
+1421960454 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\inputfuncs.cpp
+	"inputFuncs.hpp"
+
+1421862535 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\inputfuncs.hpp
+	<iostream>
+	<windows.h>
+	<string>
+	<sstream>
+	"outputFuncs.hpp"
+	"mainStructs.hpp"
+
+1422210258 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\son.hpp
+	<iostream>
+	<wininet.h>
+	<vector>
+	<string>
+	<sstream>
+	<fstream>
+	<SFML/Audio.hpp>
+	<SFML/Network.hpp>
+
+1417738158 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio.hpp
+	<SFML/System.hpp>
+	<SFML/Audio/Listener.hpp>
+	<SFML/Audio/Music.hpp>
+	<SFML/Audio/Sound.hpp>
+	<SFML/Audio/SoundBuffer.hpp>
+	<SFML/Audio/SoundBufferRecorder.hpp>
+	<SFML/Audio/SoundRecorder.hpp>
+	<SFML/Audio/SoundStream.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system.hpp
+	<SFML/Config.hpp>
+	<SFML/System/Clock.hpp>
+	<SFML/System/Err.hpp>
+	<SFML/System/InputStream.hpp>
+	<SFML/System/Lock.hpp>
+	<SFML/System/Mutex.hpp>
+	<SFML/System/Sleep.hpp>
+	<SFML/System/String.hpp>
+	<SFML/System/Thread.hpp>
+	<SFML/System/ThreadLocal.hpp>
+	<SFML/System/ThreadLocalPtr.hpp>
+	<SFML/System/Utf.hpp>
+	<SFML/System/Vector2.hpp>
+	<SFML/System/Vector3.hpp>
+
+1418167558 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\config.hpp
+	"TargetConditionals.h"
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\clock.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/Time.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\export.hpp
+	<SFML/Config.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\time.hpp
+	<SFML/System/Export.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\err.hpp
+	<SFML/System/Export.hpp>
+	<ostream>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\inputstream.hpp
+	<SFML/Config.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\lock.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\noncopyable.hpp
+	<SFML/System/Export.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\mutex.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\sleep.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/Time.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\string.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/Utf.hpp>
+	<locale>
+	<string>
+	<SFML/System/String.inl>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\utf.hpp
+	<SFML/Config.hpp>
+	<algorithm>
+	<locale>
+	<string>
+	<cstdlib>
+	<SFML/System/Utf.inl>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\utf.inl
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\string.inl
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\thread.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<cstdlib>
+	<SFML/System/Thread.inl>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\thread.inl
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\threadlocal.hpp
+	<SFML/System/Export.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<cstdlib>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\threadlocalptr.hpp
+	<SFML/System/ThreadLocal.hpp>
+	<SFML/System/ThreadLocalPtr.inl>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\threadlocalptr.inl
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\vector2.hpp
+	<SFML/System/Vector2.inl>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\vector2.inl
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\vector3.hpp
+	<SFML/System/Vector3.inl>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\system\vector3.inl
+
+1417738158 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio\listener.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/System/Vector3.hpp>
+
+1417738158 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio\export.hpp
+	<SFML/Config.hpp>
+
+1417738158 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio\music.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundStream.hpp>
+	<SFML/System/Mutex.hpp>
+	<SFML/System/Time.hpp>
+	<string>
+	<vector>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio\soundstream.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundSource.hpp>
+	<SFML/System/Thread.hpp>
+	<SFML/System/Time.hpp>
+	<SFML/System/Mutex.hpp>
+	<cstdlib>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio\soundsource.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/System/Vector3.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio\sound.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundSource.hpp>
+	<SFML/System/Time.hpp>
+	<cstdlib>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio\soundbuffer.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/System/Time.hpp>
+	<string>
+	<vector>
+	<set>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio\soundbufferrecorder.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/Audio/SoundBuffer.hpp>
+	<SFML/Audio/SoundRecorder.hpp>
+	<vector>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio\soundrecorder.hpp
+	<SFML/Audio/Export.hpp>
+	<SFML/System/Thread.hpp>
+	<SFML/System/Time.hpp>
+	<vector>
+	<string>
+
+1422210878 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\son.cpp
+	"son.hpp"
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network.hpp
+	<SFML/System.hpp>
+	<SFML/Network/Ftp.hpp>
+	<SFML/Network/Http.hpp>
+	<SFML/Network/IpAddress.hpp>
+	<SFML/Network/Packet.hpp>
+	<SFML/Network/SocketSelector.hpp>
+	<SFML/Network/TcpListener.hpp>
+	<SFML/Network/TcpSocket.hpp>
+	<SFML/Network/UdpSocket.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\ftp.hpp
+	<SFML/Network/Export.hpp>
+	<SFML/Network/TcpSocket.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<SFML/System/Time.hpp>
+	<string>
+	<vector>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\export.hpp
+	<SFML/Config.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\tcpsocket.hpp
+	<SFML/Network/Export.hpp>
+	<SFML/Network/Socket.hpp>
+	<SFML/System/Time.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\socket.hpp
+	<SFML/Network/Export.hpp>
+	<SFML/Network/SocketHandle.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<vector>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\sockethandle.hpp
+	<SFML/Config.hpp>
+	<basetsd.h>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\http.hpp
+	<SFML/Network/Export.hpp>
+	<SFML/Network/IpAddress.hpp>
+	<SFML/Network/TcpSocket.hpp>
+	<SFML/System/NonCopyable.hpp>
+	<SFML/System/Time.hpp>
+	<map>
+	<string>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\ipaddress.hpp
+	<SFML/Network/Export.hpp>
+	<SFML/System/Time.hpp>
+	<istream>
+	<ostream>
+	<string>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\packet.hpp
+	<SFML/Network/Export.hpp>
+	<string>
+	<vector>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\socketselector.hpp
+	<SFML/Network/Export.hpp>
+	<SFML/System/Time.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\tcplistener.hpp
+	<SFML/Network/Export.hpp>
+	<SFML/Network/Socket.hpp>
+
+1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network\udpsocket.hpp
+	<SFML/Network/Export.hpp>
+	<SFML/Network/Socket.hpp>
+	<vector>
+

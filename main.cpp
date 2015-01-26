@@ -1,9 +1,6 @@
 #include "main.hpp"
 
-int main(){
-    /*system("cd ../../"); // On se remet dans le root
-    system("tree .");
-    system("pause");*/
+int main(int argc, char *argv[]){
 
     // Main Inits
     Env env;
@@ -12,17 +9,19 @@ int main(){
     // Win32 inits
     env.cI=GetStdHandle(STD_INPUT_HANDLE);
     env.cO=GetStdHandle(STD_OUTPUT_HANDLE);
+
     CONSOLE_SCREEN_BUFFER_INFO csbi;
-    SMALL_RECT consRect;
-    COORD bufSize;
     GetConsoleScreenBufferInfo(env.cO, &csbi);
+    COORD bufSize(csbi.dwSize);
+
+    /*SMALL_RECT consRect;
     consRect.Top=0; consRect.Left=0;
-    consRect.Right=csbi.dwMaximumWindowSize.X-1;
+    consRect.Right=csbi.dwMaximumWindowSize.X*14/9-12; // Calcul estrange lié à la police, faut voir la vraie taille max
     consRect.Bottom=csbi.dwMaximumWindowSize.Y-1;
-    bufSize.X=csbi.dwMaximumWindowSize.X;
+    bufSize.X=csbi.dwMaximumWindowSize.X*14/9-11;
     bufSize.Y=csbi.dwMaximumWindowSize.Y;
     SetConsoleScreenBufferSize(env.cO, bufSize);
-    SetConsoleWindowInfo(env.cO, true, &consRect);
+    SetConsoleWindowInfo(env.cO, true, &consRect);*/
 
     //SetConsoleCP(65001); SetConsoleOutputCP(65001);
     SetConsoleCP(1252); SetConsoleOutputCP(1252);
@@ -32,10 +31,10 @@ int main(){
 
 
     setCCol(FOREGROUND_GREEN);
-    cout << "kikoOshell 0.1 ";
+    cout << "kikoOshell 0.2 ";
     // Afficher l'heure et une phrase débile
     { // Scope pour grosse variable temporaire, m'enfin à voir comment c'est mis en mémoire...
-        string phrases[]={
+        char* phrases[]={
             "Sans huile de palme depuis 2015 (mais avec d'autres trucs pires)",
             "Mal au crâne ? Avalez un KShell !",
             "Garanti ou intégralement remboursé !"
@@ -48,10 +47,10 @@ int main(){
     cout << "Now loading!" << endl;
     setCCol(FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     cout << "For your pleasure!" << endl;
-    for(unsigned char nbM=0;nbM<20;nbM++){
+    for(unsigned char nbM=0;nbM<10;nbM++){
         COORD matrixPos;
         matrixPos.X=0; matrixPos.Y=3;
-        unsigned int matrixArea(bufSize.X*(bufSize.Y-3));
+        unsigned int matrixArea(bufSize.X*(bufSize.Y-3)); // Dessine comme un porc dans tout le buffer vertical
         FillConsoleOutputCharacter(env.cO, ' ',  matrixArea, matrixPos, NULL);
         FillConsoleOutputAttribute(env.cO, FOREGROUND_GREEN, matrixArea, matrixPos, NULL);
         for(unsigned int nbN=0;nbN<matrixArea/3;nbN++){
@@ -84,7 +83,7 @@ int main(){
         }
     }while(env.userName.empty());
 
-    env.cwd="|laYgen|" + env.userName + "|médocs";
+    env.cwd="|laYgen|" + env.userName + "|maidocs";
     setCCol(3 | FOREGROUND_INTENSITY);
     cout << endl << "Bhyaimveunuhe " << env.userName << " !" << endl;
     cout << "Chayl spayssyalysay en kikoOscript v. 0.1" << endl;
@@ -154,7 +153,7 @@ int main(){
     cout << "Quittance..." << endl;
     char* phrasesFin[]={
         "C'est triste que vous partiez dayja. Gertrude avait fait des patates.",
-        "Attention aux poules dans le champ derriere la ferme. Elles n'ont pas ete traites.",
+        "Attention aux poules dans le champ derriere la ferme. Elles n'ont pas aytay traites.",
         "De toutes fassons je vous aimais pas."
     };
     SM.say(phrasesFin[rand()%3]);

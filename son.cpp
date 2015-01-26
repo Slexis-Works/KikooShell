@@ -83,7 +83,7 @@ bool SoundManager::say(LPSTR text, string voice){
     //cout << "Réponse : " << rep.getStatus() /*<< " " << rep.getBody() */<< endl;
 
     stringstream sFileName;
-    sFileName << "trhuKaintern/taayaimpé/Voxygen" << m_nbSnd++ << ".ogg";
+    sFileName << "trhuKaintern/taaYaiMpai/Voxygen" << m_nbSnd++ << ".ogg";
 
     ofstream tempFile(sFileName.str(), ios::binary);
     string repMP3(rep.getBody());
@@ -92,6 +92,6 @@ bool SoundManager::say(LPSTR text, string voice){
 
     play(sFileName.str());
 
-    //remove("trhuKaintern/taayaimpé/tmp.ogg"); // La sécuretance
+    //remove("trhuKaintern/taaYaiMpai/tmp.ogg"); // La sécuretance
     delete charEnc;
 }

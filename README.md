@@ -2,8 +2,8 @@
 ##Présentations
 Ceci est une parodie d'interface Bash pour Windows, rassemblant les programmes Kikoo.
 ## Utilisation
-Une fois le dossier bin/Release téléchargé, il suffit de lancer le raccourci pour profiter du programme.
-Pour la petit histoire, le raccourci permet de configurer certains paramètres tels que la police que je n'ai pas su faire pour Windows XP.
+Une fois le dossier bin/Release téléchargé, il faut créer un raccourci de bin/Release/root/trhuKaintern/KikooShell.exe dans un endroit plus pratique.
+Faites un clic droit sur ce raccourci, et modifiez le champ "Démarrer dans" de sorte à ce que le dossier courant soit root/. Il faut également changer la police, celle par défaut en général ne supportant pas les caractères étendus. Arrangez vous ausssi pour avoir la fenêtre la plus grande possible.
 ## Ajouter une commande
 Pour ajouter vos propres commandes, il faut se rendre dans le main.cpp. Il y a un endroit où vous pouvez voir if(env.cmd=="..."). Insérez vos commandes avant n'importe quel else if.
 Les arguments sont stockés dans env.args.

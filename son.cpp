@@ -8,30 +8,39 @@ SoundManager::SoundManager() : m_nbSnd(0)
 
 SoundManager::~SoundManager(){
     for(sf::Int32 i=0; i<m_sons.size(); i++){
-        delete m_sons[i].first;
+        delete m_sons[i].music;
         //cout << "Suppression de " << m_sons[i].second;
         m_sons.erase(m_sons.begin()+i);
     }
 }
 
-bool SoundManager::play(string path){
-    sf::Music *newSound(new sf::Music);
-    newSound->openFromFile(path);
-    newSound->play();
-    pair<sf::Music*, string> newPair;
-    newPair.first=newSound;
-    newPair.second=path;
-    m_sons.push_back(newPair);
-    //cout << "Lecture de " << path << endl;
+bool SoundManager::play(string path, sf::Uint8 flags){
+    if(flags&F_SM_SYNC){
+        sf::Music music;
+        music.openFromFile(path);
+        music.play();
+        while(music.getStatus()!=sf::Music::Stopped){
+            sf::sleep(sf::milliseconds(100));
+        }
+    }else{
+        Track newTrack;
+        newTrack.path=path;
+        newTrack.flags=flags;
+        newTrack.music=new sf::Music;
+        newTrack.music->openFromFile(path);
+        newTrack.music->play();
+        m_sons.push_back(newTrack);
+        //cout << "Lecture de " << path << endl;
 
-    // Nettoyage
+        // Nettoyage
+    }
     cleanStop();
 }
 
 void SoundManager::cleanStop(){
     for(sf::Int32 i=0; i<m_sons.size(); i++){
-        if(m_sons[i].first->getStatus()==sf::Sound::Stopped){
-            delete m_sons[i].first;
+        if(m_sons[i].music->getStatus()==sf::Sound::Stopped){
+            delete m_sons[i].music;
             //cout << "Suppression de " << m_sons[i].second << endl;
             m_sons.erase(m_sons.begin()+i);
             i--;
@@ -44,20 +53,23 @@ void SoundManager::cleanStop(){
 
 }
 
-bool SoundManager::say(LPSTR text, string voice){
+bool SoundManager::say(LPSTR text, sf::Uint16 flags, string voice){
     // TODO Vérifier en MD5 si le truc n'a pas déjà été DL, puisqu'on rm qu'à la fin. Le HMAC serait-il utile du coup... ?
     // Se référer à http://ws.voxygen.fr/documentation.html
-    cout << "Fauw aykoutay " << voice << " deer \"" << text << '"' << endl;
+    if(!(flags&F_SMS_NODISP))
+        cout << "Fauw aykoutay " << voice << " deer \"" << text << '"' << endl;
+
     sf::Http http;
     http.setHost("http://voxygen.fr/");
     sf::Http::Request req;
     req.setMethod(sf::Http::Request::Get);
 
     LPCSTR charBef(text);
-    LPTSTR charEnc((LPTSTR)new char[512]);
-    DWORD bufL=512;
+    LPTSTR charEnc((LPTSTR)new char[2048]);
+    DWORD bufL=2048;
     InternetCanonicalizeUrl(charBef, charEnc, &bufL, NULL);
     string encTxt(charEnc);
+    delete charEnc;
 
     req.setUri("/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&text="+encTxt+"&header=headerless&coding=ogg%3A1.0&voice="+voice); // ogg:1.0 désigne le format et la qualité. 0.0 ne semble que baisser le volume...
 
@@ -85,13 +97,15 @@ bool SoundManager::say(LPSTR text, string voice){
     stringstream sFileName;
     sFileName << "trhuKaintern/taaYaiMpai/Voxygen" << m_nbSnd++ << ".ogg";
 
-    ofstream tempFile(sFileName.str(), ios::binary);
     string repMP3(rep.getBody());
-    tempFile.write(repMP3.c_str(), repMP3.size());
-    tempFile.close();
-
-    play(sFileName.str());
-
-    //remove("trhuKaintern/taaYaiMpai/tmp.ogg"); // La sécuretance
-    delete charEnc;
+    if(repMP3.size()>10){
+        ofstream tempFile(sFileName.str(), ios::binary);
+        tempFile.write(repMP3.c_str(), repMP3.size());
+        tempFile.close();
+        play(sFileName.str(), flags&0xFF); // Filtrage des 8 derniers flags
+        return true;
+    }else{
+        cout << "Impossible de charger le son depuis http://ws.voxygen.fr" << newPath.substr(20) << endl;
+        return false;
+    }
 }

@@ -6,13 +6,17 @@ int main(int argc, char *argv[]){
     Env env;
     SoundManager SM;
 
+    env.dirt=0;
+    env.maxDirt=15; // 10 pour bien faire c
+    env.txtCol=FOREGROUND_WHITE | FOREGROUND_INTENSITY;
+
     // Win32 inits
     env.cI=GetStdHandle(STD_INPUT_HANDLE);
     env.cO=GetStdHandle(STD_OUTPUT_HANDLE);
 
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(env.cO, &csbi);
-    COORD bufSize(csbi.dwSize);
+    COORD bufSize(csbi.dwSize), winSize{csbi.srWindow.Right-csbi.srWindow.Left, csbi.srWindow.Bottom-csbi.srWindow.Top};
 
     /*SMALL_RECT consRect;
     consRect.Top=0; consRect.Left=0;
@@ -31,7 +35,7 @@ int main(int argc, char *argv[]){
 
 
     setCCol(FOREGROUND_GREEN);
-    cout << "kikoOshell 0.2 ";
+    cout << "kikoOshell 0.3 ";
     // Afficher l'heure et une phrase débile
     { // Scope pour grosse variable temporaire, m'enfin à voir comment c'est mis en mémoire...
         string phrases[]={
@@ -45,12 +49,12 @@ int main(int argc, char *argv[]){
 
     }
 
-    setCCol(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    setCCol(FOREGROUND_RED | FOREGROUND_INTENSITY);
     cout << "Now loading!" << endl;
     setCCol(FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     cout << "For your pleasure!" << endl;
     for(unsigned char nbM=0;nbM<10;nbM++){
-        COORD matrixPos;
+        COORD matrixPos; // FIXME Pas forcément 3 suivant les dimensions de la fenêtre
         matrixPos.X=0; matrixPos.Y=3;
         unsigned int matrixArea(bufSize.X*(bufSize.Y-3)); // Dessine comme un porc dans tout le buffer vertical
         FillConsoleOutputCharacter(env.cO, ' ',  matrixArea, matrixPos, NULL);
@@ -65,7 +69,7 @@ int main(int argc, char *argv[]){
     }
     system("cls");
     cout << "Automaticly switched language to: Frremçèh" << endl << endl;
-    setCCol(7);
+    setCCol(env.txtCol);
     Sleep(1000+rand()%1000);
     do{
         cout << "Vautre heedantiphyam : ";
@@ -97,6 +101,10 @@ int main(int argc, char *argv[]){
         // Si la fenêtre a été redimensionnée
         GetConsoleScreenBufferInfo(env.cO, &csbi);
         bufSize=csbi.dwSize;
+        winSize=COORD{csbi.srWindow.Right-csbi.srWindow.Left, csbi.srWindow.Bottom-csbi.srWindow.Top};
+        stringstream ssTitle;
+        ssTitle << "KikooShell - (" << bufSize.X << "x" << bufSize.Y << ") Propretay : (" << (int)env.dirt << "/" << (int)env.maxDirt << ")";
+        SetConsoleTitle(ssTitle.str().c_str());
 
         if(env.cmd=="cwd"){
             if(env.args.size()){
@@ -125,12 +133,11 @@ int main(int argc, char *argv[]){
             cout << "Probablement d'autres trucs..." << endl;
             cout << "Et, de sûr, encore d'autres trucs." << endl;
         }else if(env.cmd=="sleep"){
-            char* phrases[]={
+            SM.sayRand({
                 "J'me taperais bien une p'tite sieste.",
                 "Regardez tous ces gens trop contents !",
                 "J'allions me suicider. Parce que pour dormir c'est top."
-            };
-            SM.say(phrases[rand()%3]);
+            });
             setCCol(FOREGROUND_GREEN | FOREGROUND_RED);
             cout << "Livre dort :" << endl;
             setCCol(7);
@@ -138,9 +145,84 @@ int main(int argc, char *argv[]){
             cout << "- Au moins ça plante moins que Windows." << endl << "   Roger Toukompry" << endl;
             cout << "- anph1 hum os adap t o jem naurmo" << endl << "   Jean-Kévin Kikoo" << endl;
             cout << "- Mais K(ikooSh)ell m*rde !" << endl << "   Un rageux." << endl;
+        }else if(env.cmd=="kouleur"){
+            if(env.args.size()){
+                if(env.dirt>env.maxDirt-2){
+                    SM.say("Désolé, mais c'est trop crade pour mettre de la couleur.");
+                }else{
+                    if(env.args[0]=="rooj"){
+                        env.txtCol=FOREGROUND_RED | FOREGROUND_INTENSITY;
+                        setCCol(FOREGROUND_RED | FOREGROUND_INTENSITY);
+                        SM.say("Rouge, c'est la couleur de Gertrude quand elle est en colère.");
+                    }else if(env.args[0]=="vair"){
+                        env.txtCol=FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+                        setCCol(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                        SM.say("Vert, ça me rappelle le lait que m'offrent les poules tous les soirs.");
+                    }else if(env.args[0]=="bleu"){
+                        env.txtCol=FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+                        setCCol(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+                        SM.say("Bleu, ben ça c'est les beaux paturages où y'a Raoul et son tracteur.");
+                    }else{
+                        cout << "Clampin, faut mettre ";
+                        setCCol(FOREGROUND_RED|FOREGROUND_INTENSITY); cout << "rooj ";
+                        setCCol(FOREGROUND_GREEN|FOREGROUND_INTENSITY); cout << "vair ";
+                        setCCol(env.txtCol); cout << "ou bien ";
+                        setCCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY); cout << "bleu ";
+                        setCCol(env.txtCol); cout << "en plus." << endl;
+                    }
+                }
+            }else{
+                cout << "Clampin, faut mettre ";
+                setCCol(FOREGROUND_RED|FOREGROUND_INTENSITY); cout << "rooj ";
+                setCCol(FOREGROUND_GREEN|FOREGROUND_INTENSITY); cout << "vair ";
+                setCCol(env.txtCol); cout << "ou bien ";
+                setCCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY); cout << "bleu ";
+                setCCol(env.txtCol); cout << "en plus." << endl;
+            }
         }else if(env.cmd=="makeclean"){
-            SM.say("Ben, allons dans la salle de. Ben.", F_SMS_NODISP);
+            SM.sayRand({
+                "J'ai amené la brosse à dent avec laquelle je nettoie le tracteur.",
+                "Ben. Allons dans la salle de. Ben.",
+                "Attention ça va faire plein de bubulles !",
+                "Le cochon. Il as tout sali avec ses mains sales !"
+            }, F_SMS_NODISP|F_SM_SYNC);
             system("CLS");
+
+            if(env.dirt>=env.maxDirt){
+                SM.say("C'était tellement crade que j'ai paumé la couleur.", F_SM_SYNC | F_SMS_NODISP);
+                env.txtCol=FOREGROUND_WHITE | FOREGROUND_INTENSITY;
+                env.dirt=0;
+                if(env.dirt==env.maxDirt){
+                    env.txtCol=0;
+                    SM.say("C'est trop crade ! J'arrive pas à récurer. Faudrait changer ou rebooter.", F_SMS_NODISP);
+                }else{
+                    env.maxDirt--;
+                    if(env.dirt==env.maxDirt){
+                        env.txtCol=FOREGROUND_INTENSITY;
+                        SM.say("J'ai fait du mieux qu'j'ai pu, mais ça va pas tiendrer longtemps.", F_SMS_NODISP);
+                    }else if(env.dirt>env.maxDirt-5){
+                        env.txtCol&=~FOREGROUND_INTENSITY;
+                    }
+                }
+            }else{
+                env.dirt=0;
+                env.maxDirt--;
+                if(env.dirt==env.maxDirt){
+                    env.txtCol=FOREGROUND_INTENSITY;
+                    SM.say("J'ai fait du mieux qu'j'ai pu, mais ça va pas tiendrer longtemps.", F_SMS_NODISP);
+                }else if(env.dirt>env.maxDirt-5){
+                    env.txtCol&=~FOREGROUND_INTENSITY;
+                }else
+                    env.txtCol|=FOREGROUND_INTENSITY;
+            }
+        }else if(env.cmd=="reboot"){
+            SM.sayRand({
+                "Surtout regardez pas le code source.",
+                "Heu, évitez de le faire MAX_CALL_STACK fois.",
+                "Encore un qu'a tout dégueulassé et qui rachète plutôt que de faire le ménage hein !"
+            }, F_SM_SYNC);
+            system("cls");
+            return main(argc, argv);
         }else if(env.cmd=="ping" || env.cmd=="pong"){ // pOng en multi ? Ou param
             system("CLS");
             SM.say("Veuillez patienter.", F_SMS_NODISP | F_SM_SYNC);
@@ -254,6 +336,10 @@ int main(int argc, char *argv[]){
             SM.say("Onche onche ondulay !", F_SMS_NODISP | F_SM_SYNC);
             cout << "~:hap:~ ONSH ONSH ONDULAY" << endl;
             SM.say("Onche onche, tu veux du punch, petit pataponche. Ce soir, c'est onche onche party !");
+
+            // Trow gentil ! Mais mérité.
+            env.maxDirt=255;
+            env.dirt=0;
         }else if(env.cmd==":noel:" || env.cmd=="microsoft"){
             if(env.cmd==":noel:"){
                 cout << "PFEUH ! HAP VAINCRA !" << endl;
@@ -271,8 +357,8 @@ int main(int argc, char *argv[]){
             //SM.say("Une menace, a et T D tec T.", F_SMS_NODISP, "Agnes");
             SM.say("Une menace, a été détectée.", F_SMS_NODISP, "Agnes");
             for(unsigned char i=0;i<150;i++){
-                sf::Uint64 fakeFile(rand()<<32 + rand());
-                cout << "Suppression de " << pathToWin << "\\" <<  fakeFile << ".sys" << endl;
+                //sf::Uint64 fakeFile((rand()<<32) + rand());
+                cout << "Suppression de " << pathToWin << "\\" <<  rand() << ".sys" << endl;
                 sf::sleep(sf::milliseconds(rand()%30));
             }/*
             for(unsigned char i=0;i<100;i++){
@@ -295,10 +381,10 @@ int main(int argc, char *argv[]){
         // Reste à unifier les exécutables, ou balancer la commande dans le vide, si Windows le fait
         }else if(env.cmd=="GraphicalShit"){
             if(env.args.size()){
-                ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , env.args[0].c_str(), NULL, NULL);
+                ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , env.args[0].c_str(), NULL, 0);
                 SM.say("Quand sa aura fini faudra faire deux fois Windows+D, sinon les gens ils vont avoir peur !"); // Le plus devient un "p'cent"
             }else{
-                ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , NULL, NULL, NULL);
+                ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , NULL, NULL, 0);
                 cout << "Spécifiez un nombre pour plus de fun !" << endl;
             }
         }else if(env.userName==env.cmd){

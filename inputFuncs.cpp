@@ -6,9 +6,19 @@ void mainInput(Env &env){
     //GetConsoleCursorInfo(env.cO, &cci);GetCons
     //GetConvertStg() ??
 
+    // Les mains sales encrassent l'écran
+    env.dirt++;
+    if(env.dirt>env.maxDirt){
+        env.txtCol=0;
+    }else if(env.dirt==env.maxDirt){
+        env.txtCol=FOREGROUND_INTENSITY;
+    }else if(env.dirt>env.maxDirt-5){
+        env.txtCol&=~FOREGROUND_INTENSITY;
+    }
+
     setCCol(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-    cout << " " << env.cwd;
-    setCCol(7);
+    cout << "=ndaube ] " << env.cwd;
+    setCCol(env.txtCol);
     cout << " ~$ ";
     stringstream rep;
     string strrep;

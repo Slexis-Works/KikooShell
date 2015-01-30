@@ -40,10 +40,6 @@
 			<Add library="sfml-network" />
 			<Add library="sfml-audio" />
 			<Add library="sfml-system" />
-			<Add library="ws2_32" />
-			<Add library="winmm" />
-			<Add library="openal32" />
-			<Add library="sndfile" />
 			<Add library="wininet" />
 			<Add library="crypt32" />
 			<Add directory="C:/Documents and Settings/alexis/Mes documents/scripts/libs/SFML-2.2/lib" />

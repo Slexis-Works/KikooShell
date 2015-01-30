@@ -94,7 +94,7 @@ int main(int argc, char *argv[]){
     cout << endl << "Bhyaimveunuhe " << env.userName << " !" << endl;
     cout << "Chayl spayssyalysay en kikoOscript v. 0.1" << endl;
     cout << "127.0.0.1 sur localhost" << endl << endl;
-    setCCol(7);
+    setCCol(env.txtCol);
 
     do{
         _mainInput();
@@ -125,7 +125,7 @@ int main(int argc, char *argv[]){
                 cout << "Koman tahe ooblyay un daussyay !" << endl;
             }
         }else if(env.cmd=="ls"){
-            SM.say("Ben alors la machine a vapeur elle devrait traverser les crans. Sauf que la SNCF est encore en graive. Salauds de pauvres !");
+            SM.say("Ben alors la machine à vapeur elle devrait traverser l'écran. Sauf que la SNCF est encore en grève. Salauds de pauvres !");
             //SM.say("Woufwouwouwouwouwfoufw ah"); On dirait Fak u Gooby
             //SM.say("Bien le bonjour les gens.");
         }else if(env.cmd=="sl"){
@@ -140,7 +140,7 @@ int main(int argc, char *argv[]){
             });
             setCCol(FOREGROUND_GREEN | FOREGROUND_RED);
             cout << "Livre dort :" << endl;
-            setCCol(7);
+            setCCol(env.txtCol);
             cout << "- EKShellent !" << endl << "   Jerry Traifaur" << endl;
             cout << "- Au moins ça plante moins que Windows." << endl << "   Roger Toukompry" << endl;
             cout << "- anph1 hum os adap t o jem naurmo" << endl << "   Jean-Kévin Kikoo" << endl;
@@ -260,20 +260,20 @@ int main(int argc, char *argv[]){
                 SM.say("Ben la vache elle a rien à dire en ce moment.");
             }
         }else if(env.cmd=="tlecteur"){
-            SM.say("Ben y'a beaucoup de choses a dire sur les tracteurs. Parce que les tracteurs, c'est ma passion depuis que je mesure trois pommes virgule deux.");
+            SM.say("Ben y'a beaucoup de choses à dire sur les tracteurs. Parce que les tracteurs, c'est ma passion depuis que je mesure trois pommes virgule deux.");
             string rep;
             do{
                 cout << "Quoi qu'tu veux voir ?" << endl;
                 setCCol(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
                 cout << "citation    faidyver    tautologie    nada" << endl;
-                setCCol(7);
+                setCCol(env.txtCol);
                 rep=basicInput();
                 if(rep=="citation"){
                     string cits[]={
                         "\"Un tracteur, dans un garage, n'est qu'un objet technique ; quand il est au labour, et s'incline dans le sillon pendant que la terre se verse, il peut être perçu comme beau.\" --Gilbert Simondon",
-                        "Un tracteur, dans un garage, n'est qu'un objet technique. Quand il est au labour, et s'incline dans le sillon pendant que la terre se verse, il peut aitre persu comme beau. Magnifique citation de Gilbert Simondon",
+                        "Un tracteur, dans un garage, n'est qu'un objet technique. Quand il est au labour, et s'incline dans le sillon pendant que la terre se verse, il peut être perçu comme beau. Magnifique citation de Gilbert Simondon",
                         "\"Le forceps doit être préférable au tracteur lorsqu'il s'agit de rectifier la position de la tête et de diminuer son diamètre transverse ; cependant il est possible d'employer le tracteur à ces opérations et avec plus d'avantages qu'on n'est peut-être porté à le croire au premier abord.\" -- Neil Arnott",
-                        "Le forceps doit aitre pr'et f'et rable au tracteur lorsqu'il s'agit de rectifier la position de la taite et de diminuer son diamaitre transverse. Cependant il est possible d'employer le tracteur a ces op'et rations et avec plus d'avantages qu'on n'est peutaitre portai a le croire au premier abord. Un chouette cours de mes canique traditionnelle de Neil Arnott."
+                        "Le forceps doit être préférable au tracteur lorsqu'il s'agit de rectifier la position de la tête et de diminuer son diamètre transverse. Cependant il est possible d'employer le tracteur a ces opérations et avec plus d'avantages qu'on n'est peut-être porté à le croire au premier abord. Un chouette cours de mécanique traditionnelle de Neil Arnott."
                     };
                     int cit=rand()%2;
                     cout << cits[cit*2] << endl;
@@ -283,11 +283,11 @@ int main(int argc, char *argv[]){
                     sDispStr << "Le tracteur a ";
                     sGetStr << "Le tracteur. A ";
                     string actions[]={
-                        "violé", "violet",
-                        "écrasé", "aikrazet",
-                        "brulé", "brulet",
-                        "mangé", "manjet",
-                        "poussé", "pousset"
+                        "violé",
+                        "écrasé",
+                        "brulé",
+                        "mangé",
+                        "poussé",
                     }, persos[]={
                         "la poule", "la vache", "le canard",
                         "le cheval", "le chien", "le cochon",
@@ -295,21 +295,21 @@ int main(int argc, char *argv[]){
                         "le tracteur", "le tigre en papier", "la Gertrude",
                         "Emmanuel Daubert", "le KikooShell", "Raoul le cultivateur"
                     }, lieux[]={
-                        "l'entrepôt à maïs", "l'entrepot a ma hisse",
-                        "la forêt", "la foret",
-                        "l'église", "les glises la",
-                        "la voiture à Gérard", "la voiture a l'autre Jairard",
-                        "le champ derrière la ferme", "le champ derri aire la ferme"
+                        "l'entrepôt à maïs",
+                        "la forêt",
+                        "l'église",
+                        "la voiture à l'autre Gérard",
+                        "le champ derrière la ferme"
                     };
                     int rndPhrase=rand()%5;
-                    sDispStr << actions[rndPhrase*2] << " ";
-                    sGetStr << actions[rndPhrase*2+1] << ". ";
+                    sDispStr << actions[rndPhrase] << " ";
+                    sGetStr << actions[rndPhrase] << ". ";
                     rndPhrase=rand()%15;
                     sDispStr << persos[rndPhrase] << " dans ";
                     sGetStr << persos[rndPhrase] << ". Dans ";
                     rndPhrase=rand()%5;
-                    sDispStr << lieux[rndPhrase*2] << ".";
-                    sGetStr << lieux[rndPhrase*2+1] << ".";
+                    sDispStr << lieux[rndPhrase] << ".";
+                    sGetStr << lieux[rndPhrase] << ".";
                     cout << sDispStr.str() << endl;
                     SM.say((LPSTR)sGetStr.str().c_str(), F_SMS_NODISP);
                 }else if(rep=="tautologie"){
@@ -319,7 +319,6 @@ int main(int argc, char *argv[]){
                     SM.say("Dommage, j'avais beaucoup de choses cools sur les tracteurs. Parce que les tracteurs, ayeux pourquoi tu me tapes ?");
                 }
             }while(rep!="nada");
-            setCCol(7);
         }else if(env.cmd==":hap:"){
             SM.say("Onche onche a gauche", F_SMS_NODISP | F_SM_SYNC);
             cout << "\\:hap:\\ ONSH ONSH A GOCH" << endl;
@@ -366,7 +365,7 @@ int main(int argc, char *argv[]){
                 cout << "Suppression de " << pathToFiles << fakeFile << ".exe";
                 sf::sleep(sf::milliseconds(rand()%50));
             }*/
-            setCCol(7 | FOREGROUND_INTENSITY);
+            setCCol(FOREGROUND_WHITE | FOREGROUND_INTENSITY);
             if(env.cmd==":noel:")
                 cout << endl << "Pour plus de prudence pour les hapistes, votre ordinateur potentiellement rempli de documents noelistes a été formaté.";
             else
@@ -382,7 +381,7 @@ int main(int argc, char *argv[]){
         }else if(env.cmd=="GraphicalShit"){
             if(env.args.size()){
                 ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , env.args[0].c_str(), NULL, 0);
-                SM.say("Quand sa aura fini faudra faire deux fois Windows+D, sinon les gens ils vont avoir peur !"); // Le plus devient un "p'cent"
+                SM.say("Quand ça aura fini faudra faire deux fois Windows+D, sinon les gens ils vont avoir peur !"); // Le plus devient un "p'cent"
             }else{
                 ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , NULL, NULL, 0);
                 cout << "Spécifiez un nombre pour plus de fun !" << endl;
@@ -400,7 +399,7 @@ int main(int argc, char *argv[]){
     SM.sayRand({
         "C'est triste que vous partiez déjà. Gertrude avait fait des patates.",
         "Attention aux poules dans le champ derrière la ferme. Elles n'ont pas été traites.",
-        "De toutes fassons je vous aimais pas.",
+        "De toutes façons je vous aimais pas.",
         "Y'a pas le feu à le lac. Ah ben si en fait. Le canard, est pyromane.",
         "Attention au tracteur, il s'entraîne pour le concours de beauté."
     },F_SM_SYNC);

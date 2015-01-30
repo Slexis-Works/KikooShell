@@ -34,14 +34,14 @@ int main(int argc, char *argv[]){
     cout << "kikoOshell 0.2 ";
     // Afficher l'heure et une phrase débile
     { // Scope pour grosse variable temporaire, m'enfin à voir comment c'est mis en mémoire...
-        char* phrases[]={
+        string phrases[]={
             "Sans huile de palme depuis 2015 (mais avec d'autres trucs pires)",
             "Mal au crâne ? Avalez un KShell !",
             "Garanti ou intégralement remboursé !",
             "Cliquez ici pour avoir l'OS en français. Ou là..."
         };
         setCCol(FOREGROUND_GREEN|FOREGROUND_INTENSITY);
-        cout << phrases[rand()%4] << endl;
+        cout << phrases[rand()%4].c_str() << endl;
 
     }
 
@@ -94,6 +94,9 @@ int main(int argc, char *argv[]){
 
     do{
         _mainInput();
+        // Si la fenêtre a été redimensionnée
+        GetConsoleScreenBufferInfo(env.cO, &csbi);
+        bufSize=csbi.dwSize;
 
         if(env.cmd=="cwd"){
             if(env.args.size()){
@@ -135,8 +138,45 @@ int main(int argc, char *argv[]){
             cout << "- Au moins ça plante moins que Windows." << endl << "   Roger Toukompry" << endl;
             cout << "- anph1 hum os adap t o jem naurmo" << endl << "   Jean-Kévin Kikoo" << endl;
             cout << "- Mais K(ikooSh)ell m*rde !" << endl << "   Un rageux." << endl;
+        }else if(env.cmd=="makeclean"){
+            SM.say("Ben, allons dans la salle de. Ben.", F_SMS_NODISP);
+            system("CLS");
+        }else if(env.cmd=="ping" || env.cmd=="pong"){ // pOng en multi ? Ou param
+            system("CLS");
+            SM.say("Veuillez patienter.", F_SMS_NODISP | F_SM_SYNC);
+            bool ballX(false), ballY(false);
+            unsigned char j1X, j2X;
+            //while(getchar!="ESC")
+            while(true){
 
-        // Trucs qui n'ont rien à voir avec l'OS
+            }
+
+        // Trucs qui n'ont rien à voir avec l'OS, mais dans l'esprit
+        }else if(env.cmd=="cowsay"){
+            if(env.args.size()){
+                string meuhs[]={ // Système probabiliste hautes performances
+                    "meuh", "meuh", "meuh",
+                    "",
+                    "meeeeuh", "meeeeuh",
+                    "mooouh",
+                    "bêêêh", "MEUH"
+                }, comm[]={
+                    "Des fois elle est plus bavarde.",
+                    "Je l'aime tellement que je crois qu'elle va remplacer Gertrude.",
+                    "Je l'ai jamais vue autant causer !",
+                    "C'est du patois charollais, vous pouvez pas comprendre."
+                };
+                string cowPhrase("Mais la vache. A dit");
+                for(size_t meuh=0;meuh<env.args.size();meuh++)
+                    cowPhrase+=" "+meuhs[rand()%9]; // Héhé, l'optimisation de s'arrêter à 9, comme ça y'a qu'un seul chiffre !
+                cowPhrase+=". En fait ça veut dire \"";
+                for(size_t mot=0;mot<env.args.size();mot++)
+                    cowPhrase+=" " + env.args[mot];
+                cowPhrase+=" \" " + comm[rand()%4];
+                SM.say(cowPhrase.c_str());
+            }else{
+                SM.say("Ben la vache elle a rien à dire en ce moment.");
+            }
         }else if(env.cmd=="tlecteur"){
             SM.say("Ben y'a beaucoup de choses a dire sur les tracteurs. Parce que les tracteurs, c'est ma passion depuis que je mesure trois pommes virgule deux.");
             string rep;
@@ -228,7 +268,8 @@ int main(int argc, char *argv[]){
                 MessageBeep(MB_ICONERROR);
                 sf::sleep(sf::seconds(0.5));
             }
-            SM.say("Une menace, a et T D tec T.", F_SMS_NODISP, "Agnes");
+            //SM.say("Une menace, a et T D tec T.", F_SMS_NODISP, "Agnes");
+            SM.say("Une menace, a été détectée.", F_SMS_NODISP, "Agnes");
             for(unsigned char i=0;i<150;i++){
                 sf::Uint64 fakeFile(rand()<<32 + rand());
                 cout << "Suppression de " << pathToWin << "\\" <<  fakeFile << ".sys" << endl;
@@ -240,7 +281,10 @@ int main(int argc, char *argv[]){
                 sf::sleep(sf::milliseconds(rand()%50));
             }*/
             setCCol(7 | FOREGROUND_INTENSITY);
-            // else ifcout << endl << "Pour plus de prudence pour les hapistes, votre ordinateur potentiellement rempli de documents noelistes a été formaté." << endl;
+            if(env.cmd==":noel:")
+                cout << endl << "Pour plus de prudence pour les hapistes, votre ordinateur potentiellement rempli de documents noelistes a été formaté.";
+            else
+                cout << endl << "Hé ! On ne dit pas de gros mots ! Pour la peine, je vais faire planter ton truc !";
             sf::sleep(sf::seconds(5));
             while(true){
                 setCCol(rand()%256);
@@ -266,13 +310,14 @@ int main(int argc, char *argv[]){
     }while(env.cmd!="quit");
 
     cout << "Quittance..." << endl;
-    char* phrasesFin[]={
-        "C'est triste que vous partiez dayja. Gertrude avait fait des patates.",
-        "Attention aux poules dans le champ derriere la ferme. Elles n'ont pas aytay traites.",
-        "De toutes fassons je vous aimais pas."
-    };
-    SM.say(phrasesFin[rand()%3]);
-    sf::sleep(sf::seconds(5));
+    //SM.say(phrasesFin[rand()%3], F_SM_SYNC);
+    SM.sayRand({
+        "C'est triste que vous partiez déjà. Gertrude avait fait des patates.",
+        "Attention aux poules dans le champ derrière la ferme. Elles n'ont pas été traites.",
+        "De toutes fassons je vous aimais pas.",
+        "Y'a pas le feu à le lac. Ah ben si en fait. Le canard, est pyromane.",
+        "Attention au tracteur, il s'entraîne pour le concours de beauté."
+    },F_SM_SYNC);
 
     return 0;
 }

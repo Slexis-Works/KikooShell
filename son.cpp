@@ -3,11 +3,11 @@
 
 SoundManager::SoundManager() : m_nbSnd(0)
 {
-
+    srand(time(NULL));
 }
 
 SoundManager::~SoundManager(){
-    for(sf::Int32 i=0; i<m_sons.size(); i++){
+    for(size_t i=0; i<m_sons.size(); i++){
         delete m_sons[i].music;
         //cout << "Suppression de " << m_sons[i].second;
         m_sons.erase(m_sons.begin()+i);
@@ -35,10 +35,11 @@ bool SoundManager::play(string path, sf::Uint8 flags){
         // Nettoyage
     }
     cleanStop();
+    return true;
 }
 
 void SoundManager::cleanStop(){
-    for(sf::Int32 i=0; i<m_sons.size(); i++){
+    for(size_t i=0; i<m_sons.size(); i++){
         if(m_sons[i].music->getStatus()==sf::Sound::Stopped){
             delete m_sons[i].music;
             //cout << "Suppression de " << m_sons[i].second << endl;
@@ -53,7 +54,7 @@ void SoundManager::cleanStop(){
 
 }
 
-bool SoundManager::say(LPSTR text, sf::Uint16 flags, string voice){
+bool SoundManager::say(const char text[], sf::Uint16 flags, string voice){
     // TODO Vérifier en MD5 si le truc n'a pas déjà été DL, puisqu'on rm qu'à la fin. Le HMAC serait-il utile du coup... ?
     // Se référer à http://ws.voxygen.fr/documentation.html
     if(!(flags&F_SMS_NODISP))
@@ -64,19 +65,23 @@ bool SoundManager::say(LPSTR text, sf::Uint16 flags, string voice){
     sf::Http::Request req;
     req.setMethod(sf::Http::Request::Get);
 
-    LPCSTR charBef(text);
-    LPTSTR charEnc((LPTSTR)new char[2048]);
+    sf::String txtToConv;
+    txtToConv=text;
+    LPCSTR charBef((char*)txtToConv.toUtf8().c_str()); // Environ 0% de chances que ceci marche chez vous
+    // Accès impossible...
+    //*(charBef+2)='X';
+    //cout << "Charbef : " << charBef << endl << "text   : " << text << endl;
+    LPSTR charEnc((LPSTR)new char[2048]);
     DWORD bufL=2048;
-    InternetCanonicalizeUrl(charBef, charEnc, &bufL, NULL);
+    InternetCanonicalizeUrl(charBef, charEnc, &bufL, 0);
     string encTxt(charEnc);
-    delete charEnc;
+    //cout << "Encoded : " << charBef << " from " << encTxt << endl;
+    //delete charEnc;
 
     req.setUri("/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&text="+encTxt+"&header=headerless&coding=ogg%3A1.0&voice="+voice); // ogg:1.0 désigne le format et la qualité. 0.0 ne semble que baisser le volume...
-
     sf::Http::Response rep(http.sendRequest(req));
     //cout << "Status " << rep.getStatus() << endl;
     string newPath(rep.getField("Location"));
-
     /*charBef=newPath.c_str();
     ZeroMemory(charEnc, 512);
     bufL=512;
@@ -89,6 +94,7 @@ bool SoundManager::say(LPSTR text, sf::Uint16 flags, string voice){
     char * hash_md5 = HMAC("", "");
     cout << "Hashage : " << HMAC(HMAC(HMAC(HMAC(HMAC(HMAC(HMAC("coding=mp3:160-0","")+"frequency=48000","")+"header=headerless","")+"parsing=tags","")+"text=Une%20d%C3%A9monstration%20en%20fran%C3%A7ais.")+"user=demo")+"voice=Philippe") << endl;*/
 
+    //cout << "newPath=" << newPath << endl;
     http.setHost("http://ws.voxygen.fr");
     req.setUri(newPath.substr(20));
     rep=http.sendRequest(req);
@@ -96,6 +102,7 @@ bool SoundManager::say(LPSTR text, sf::Uint16 flags, string voice){
 
     stringstream sFileName;
     sFileName << "trhuKaintern/taaYaiMpai/Voxygen" << m_nbSnd++ << ".ogg";
+
 
     string repMP3(rep.getBody());
     if(repMP3.size()>10){
@@ -106,6 +113,11 @@ bool SoundManager::say(LPSTR text, sf::Uint16 flags, string voice){
         return true;
     }else{
         cout << "Impossible de charger le son depuis http://ws.voxygen.fr" << newPath.substr(20) << endl;
+        cout << endl << endl << "Faudray vayrifyay day truuk kan mem." << endl;
         return false;
     }
+}
+
+bool SoundManager::sayRand(vector<string> possib, sf::Uint16 flags, string voice){
+    return say(possib[rand()%possib.size()].c_str(), flags, voice);
 }

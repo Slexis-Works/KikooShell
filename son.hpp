@@ -5,6 +5,8 @@
 #include <wininet.h>
 #include <vector>
 #include <string>
+#include <random>
+#include <time.h>
 #include <sstream>
 #include <fstream>
 #include <SFML/Audio.hpp>
@@ -30,7 +32,9 @@ public:
     ~SoundManager();
 
     bool play(string path, sf::Uint8 flags=0); // 8 flags, flags étendus et privés pour say
-    bool say(LPSTR text, sf::Uint16 flags=0, string voice="JeanJean"); // FIXME Ne supporte pas les caractères spéciaux. Voxygen renvoie du vide.
+    bool say(const char text[], sf::Uint16 flags=0, string voice="JeanJean"); // FIXME Ne supporte pas les caractères spéciaux. Voxygen renvoie du vide.
+    bool sayRand(vector<string> possib, sf::Uint16 flags=0, string voice="JeanJean");
+    //bool say([])
     void cleanStop();
 
 

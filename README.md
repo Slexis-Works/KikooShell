@@ -1,4 +1,4 @@
-# KikooShell
+# KikooShell alias KSh
 ##Présentations
 Ceci est une parodie d'interface Bash pour Windows, rassemblant les programmes Kikoo.
 C'est plus précisément la synergie de tas de conneries faites au cours du temps. Pour cette raison, **merci de faire attention au degré de merdisme incroyablement élevé de cette chose**.

@@ -7,34 +7,36 @@
 	<fstream>
 	<windows.h>
 
-1421857676 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\outputfuncs.cpp
+1423259516 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\outputfuncs.cpp
 	"outputFuncs.hpp"
 
-1422649744 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\outputfuncs.hpp
+1423688671 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\outputfuncs.hpp
 	<windows.h>
+	<iostream>
 	"mainStructs.hpp"
 
-1422654323 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\main.cpp
+1423688750 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\main.cpp
 	"main.hpp"
 
-1422180631 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\main.hpp
+1423262994 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\main.hpp
 	<iostream>
 	<fstream>
 	<windows.h>
 	<random>
 	<time.h>
 	<string>
+	<algorithm>
 	"mainStructs.hpp"
 	"outputFuncs.hpp"
 	"inputFuncs.hpp"
 	"son.hpp"
 
-1422651650 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\mainstructs.hpp
+1423688162 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\mainstructs.hpp
 	<windows.h>
 	<string>
 	<vector>
 
-1422652258 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\inputfuncs.cpp
+1423259250 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\inputfuncs.cpp
 	"inputFuncs.hpp"
 
 1421862535 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\inputfuncs.hpp
@@ -45,7 +47,7 @@
 	"outputFuncs.hpp"
 	"mainStructs.hpp"
 
-1422638087 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\son.hpp
+1423259560 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\son.hpp
 	<iostream>
 	<wininet.h>
 	<vector>
@@ -56,6 +58,8 @@
 	<fstream>
 	<SFML/Audio.hpp>
 	<SFML/Network.hpp>
+	"mainStructs.hpp"
+	"outputFuncs.hpp"
 
 1417738158 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\audio.hpp
 	<SFML/System.hpp>
@@ -219,7 +223,7 @@
 	<vector>
 	<string>
 
-1422642574 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\son.cpp
+1423260089 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\son.cpp
 	"son.hpp"
 
 1417738160 c:\documents and settings\alexis\mes documents\scripts\libs\sfml-2.2\include\sfml\network.hpp

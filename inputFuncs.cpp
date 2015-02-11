@@ -16,9 +16,9 @@ void mainInput(Env &env){
         env.txtCol&=~FOREGROUND_INTENSITY;
     }
 
-    setCCol(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    setCCol(env.bgCol|FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     cout << "=ndaube ] " << env.cwd;
-    setCCol(env.txtCol);
+    setCCol(env.bgCol|env.txtCol);
     cout << " ~$ ";
     stringstream rep;
     string strrep;

@@ -1,7 +1,7 @@
 #include "son.hpp"
 
 
-SoundManager::SoundManager() : m_nbSnd(0)
+SoundManager::SoundManager(Env &env) : m_nbSnd(0), m_env(env)
 {
     srand(time(NULL));
 }
@@ -54,11 +54,11 @@ void SoundManager::cleanStop(){
 
 }
 
-bool SoundManager::say(const char text[], sf::Uint16 flags, string voice){
+bool SoundManager::say(const char text[], sf::Uint16 flags){
     // TODO Vérifier en MD5 si le truc n'a pas déjà été DL, puisqu'on rm qu'à la fin. Le HMAC serait-il utile du coup... ?
     // Se référer à http://ws.voxygen.fr/documentation.html
     if(!(flags&F_SMS_NODISP))
-        cout << "Fauw aykoutay " << voice << " deer \"" << text << '"' << endl;
+        cout << "Fauw aykoutay " << m_env.defVoice << " deer \"" << text << '"' << endl;
 
     sf::Http http;
     http.setHost("http://voxygen.fr/");
@@ -78,7 +78,7 @@ bool SoundManager::say(const char text[], sf::Uint16 flags, string voice){
     //cout << "Encoded : " << charBef << " from " << encTxt << endl;
     //delete charEnc;
 
-    req.setUri("/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&text="+encTxt+"&header=headerless&coding=ogg%3A1.0&voice="+voice); // ogg:1.0 désigne le format et la qualité. 0.0 ne semble que baisser le volume...
+    req.setUri("/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&text="+encTxt+"&header=headerless&coding=ogg%3A1.0&voice="+m_env.defVoice); // ogg:1.0 désigne le format et la qualité. 0.0 ne semble que baisser le volume...
     sf::Http::Response rep(http.sendRequest(req));
     //cout << "Status " << rep.getStatus() << endl;
     string newPath(rep.getField("Location"));
@@ -95,6 +95,10 @@ bool SoundManager::say(const char text[], sf::Uint16 flags, string voice){
     cout << "Hashage : " << HMAC(HMAC(HMAC(HMAC(HMAC(HMAC(HMAC("coding=mp3:160-0","")+"frequency=48000","")+"header=headerless","")+"parsing=tags","")+"text=Une%20d%C3%A9monstration%20en%20fran%C3%A7ais.")+"user=demo")+"voice=Philippe") << endl;*/
 
     //cout << "newPath=" << newPath << endl;
+    if(newPath.size()<21){
+        cout << "Flaim deuh shershé leuh som (statue " << rep.getStatus() << ")" << endl;
+        return false;
+    }
     http.setHost("http://ws.voxygen.fr");
     req.setUri(newPath.substr(20));
     rep=http.sendRequest(req);
@@ -118,6 +122,59 @@ bool SoundManager::say(const char text[], sf::Uint16 flags, string voice){
     }
 }
 
-bool SoundManager::sayRand(vector<string> possib, sf::Uint16 flags, string voice){
-    return say(possib[rand()%possib.size()].c_str(), flags, voice);
+bool SoundManager::say(const char text[], string voice, sf::Uint16 flags){
+    if(!(flags&F_SMS_NODISP))
+        cout << "Fauw aykoutay " << voice << " deer \"" << text << '"' << endl;
+
+    sf::Http http;
+    http.setHost("http://voxygen.fr/");
+    sf::Http::Request req;
+    req.setMethod(sf::Http::Request::Get);
+
+    sf::String txtToConv;
+    txtToConv=text;
+    LPCSTR charBef((char*)txtToConv.toUtf8().c_str());
+    LPSTR charEnc((LPSTR)new char[2048]);
+    DWORD bufL=2048;
+    InternetCanonicalizeUrl(charBef, charEnc, &bufL, 0);
+    string encTxt(charEnc);
+    req.setUri("/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&text="+encTxt+"&header=headerless&coding=ogg%3A1.0&voice="+voice); // ogg:1.0 désigne le format et la qualité. 0.0 ne semble que baisser le volume...
+    sf::Http::Response rep(http.sendRequest(req));
+    string newPath(rep.getField("Location"));
+    if(newPath.size()<21){
+        SetConsoleTextAttribute(m_env.cO,FOREGROUND_RED);
+        cout << "Flaim deuh shershé leuh som (statue " << rep.getStatus() << ")" << endl;
+        SetConsoleTextAttribute(m_env.cO, m_env.bgCol|m_env.txtCol);
+        return false;
+    }
+    http.setHost("http://ws.voxygen.fr");
+    req.setUri(newPath.substr(20));
+    rep=http.sendRequest(req);
+
+    stringstream sFileName;
+    sFileName << "trhuKaintern/taaYaiMpai/Voxygen" << m_nbSnd++ << ".ogg";
+
+
+    string repMP3(rep.getBody());
+    if(repMP3.size()>10){
+        ofstream tempFile(sFileName.str(), ios::binary);
+        tempFile.write(repMP3.c_str(), repMP3.size());
+        tempFile.close();
+        play(sFileName.str(), flags&0xFF);
+        return true;
+    }else{
+        SetConsoleTextAttribute(m_env.cO,FOREGROUND_RED);
+        cout << "Impossible de charger le son depuis http://ws.voxygen.fr" << newPath.substr(20) << endl;
+        SetConsoleTextAttribute(m_env.cO, m_env.bgCol|m_env.txtCol);
+        cout << endl << endl << "Faudray vayrifyay day truuk kan mem." << endl;
+        return false;
+    }
+}
+
+
+bool SoundManager::sayRand(vector<string> possib, sf::Uint16 flags){
+    return say(possib[rand()%possib.size()].c_str(), flags);
+}
+bool SoundManager::sayRand(vector<string> possib, string voice, sf::Uint16 flags){
+    return say(possib[rand()%possib.size()].c_str(), voice, flags);
 }

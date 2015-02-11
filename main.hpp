@@ -7,6 +7,7 @@
 #include <random>
 #include <time.h>
 #include <string>
+#include <algorithm>
 
 #include "mainStructs.hpp"
 #include "outputFuncs.hpp"

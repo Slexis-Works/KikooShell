@@ -2,10 +2,13 @@
 #define OUTPUTFUNCS_HPP_INCLUDED
 
 #include <windows.h>
+#include <iostream>
 
 #include "mainStructs.hpp"
 
 #define FOREGROUND_WHITE 7
 #define setCCol(flags) SetConsoleTextAttribute(env.cO, flags)
+
+void dispHelp(Env &env);
 
 #endif // OUTPUTFUNCS_HPP_INCLUDED

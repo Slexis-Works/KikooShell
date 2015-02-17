@@ -30,6 +30,10 @@ struct Env{ // Environnement, qui passe de fonction en fonction
     string defVoice;
 };
 
-
+struct ReturnedError{
+    bool isError;
+    DWORD winId;
+    string errorMsg;
+};
 
 #endif // MAINSTRUCTS_HPP_INCLUDED

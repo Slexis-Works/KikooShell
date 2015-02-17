@@ -51,6 +51,8 @@
 		<Unit filename="mainStructs.hpp" />
 		<Unit filename="outputFuncs.cpp" />
 		<Unit filename="outputFuncs.hpp" />
+		<Unit filename="progFuncs.cpp" />
+		<Unit filename="progFuncs.hpp" />
 		<Unit filename="son.cpp" />
 		<Unit filename="son.hpp" />
 		<Extensions>

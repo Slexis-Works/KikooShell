@@ -502,14 +502,73 @@ int main(int argc, char *argv[]){
             }
             return 0;
         // Reste à unifier les exécutables, ou balancer la commande dans le vide, si Windows le fait
-        }else if(env.cmd=="GraphicalShit"){
+        }else if(env.cmd=="exec"){
             if(env.args.size()){
-                ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , env.args[0].c_str(), NULL, 0);
-                SM.say("Quand ça aura fini faudra faire deux fois Windows+D, sinon les gens ils vont avoir peur !"); // Le plus devient un "p'cent"
+                if(env.args[0]=="GraphicalShit"){
+                    if(env.args.size()>1){
+                        ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , env.args[1].c_str(), NULL, 0);
+                        SM.say("Quand ça aura fini faudra faire deux fois Windows+D, sinon les gens ils vont avoir peur !"); // Le plus devient un "p'cent"
+                    }else{
+                        ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , NULL, NULL, 0);
+                        cout << "Spécifiez un nombre pour plus de fun !" << endl;
+                    }
+                }else{
+                    executeInside(env.args[0]);
+                }
             }else{
-                ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , NULL, NULL, 0);
-                cout << "Spécifiez un nombre pour plus de fun !" << endl;
+                cout << "Merci de spécifier un de vos exécutables, sans l'extension .exe" << endl;
+                cout << "Tapez ";
+                setCCol(FOREGROUND_GREEN|env.bgCol);
+                cout << "sl \"|preaugram|windob\"";
+                setCCol(env.bgCol|env.txtCol);
+                cout << " pour en voir la liste." << endl;
             }
+        }else if(env.cmd=="launch"){
+            if(env.args.size()){
+                executeOutside(env.args[0]);
+            }
+
+        // Bonus
+        }else if(env.cmd=="fss" || env.cmd=="fsf"){
+            SM.play("trhuKaintern/mhuzyKaIshemsom/free-software-song.ogg");
+            cout << "Join us now and share the software;" << endl;
+            sf::sleep(sf::seconds(6.0f));
+            cout << "You'll be free, hackers, you'll be free." << endl;
+            sf::sleep(sf::seconds(8.0f));
+            cout << "Join us now and share the software;" << endl;
+            sf::sleep(sf::seconds(3.0f));
+            cout << "You'll be free, hackers, you'll be free." << endl << endl;
+            sf::sleep(sf::seconds(9.0f));
+            // 26s
+            cout << "Hoarders can get piles of money," << endl;
+            sf::sleep(sf::seconds(5.0f));
+            cout << "That is true, hackers, that is true." << endl;
+            sf::sleep(sf::seconds(6.0f)); // 37s
+            cout << "But they cannot help their neighbors;" << endl;
+            sf::sleep(sf::seconds(4.0f)); // 41s
+            cout << "That's not good, hackers, that's not good." << endl << endl;
+            sf::sleep(sf::seconds(10.0f));
+            // 51s
+            cout << "When we have enough free software" << endl;
+            sf::sleep(sf::seconds(4.0f));
+            cout << "At our call, hackers, at our call," << endl;
+            sf::sleep(sf::seconds(7.0f)); // 62s
+            cout << "We'll kick out those dirty licenses" << endl;
+            sf::sleep(sf::seconds(4.0f)); // 66s
+            cout << "Ever more, hackers, ever more." << endl << endl;
+            sf::sleep(sf::seconds(9.0f));
+            // 75s
+            cout << "Join us now and share the software;" << endl;
+            sf::sleep(sf::seconds(6.0f));
+            cout << "You'll be free, hackers, you'll be free." << endl;
+            sf::sleep(sf::seconds(8.0f));
+            cout << "Join us now and share the software;" << endl;
+            sf::sleep(sf::seconds(3.0f));
+            cout << "You'll be free, hackers, you'll be free." << endl << endl;
+            sf::sleep(sf::seconds(9.0f));
+            setCCol(FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+            cout << "*verse une larme*" << endl;
+            setCCol(env.txtCol|env.bgCol);
         }else if(env.userName==env.cmd){
             cout << "Bravo, ça c'est ton nom d'utilisateur." << endl;
         // Si toLowerCase!=, "PAS LA PEINE DE GUEULER !" MAIS JE SUIS CALME MOI !

@@ -10,8 +10,10 @@
 #include <algorithm>
 
 #include "mainStructs.hpp"
+#include "progFuncs.hpp"
 #include "outputFuncs.hpp"
 #include "inputFuncs.hpp"
 #include "son.hpp"
+
 
 #endif // MAIN_HPP_INCLUDED

@@ -20,6 +20,7 @@ void mainInput(Env &env){
     cout << "=ndaube ] " << env.cwd;
     setCCol(env.bgCol|env.txtCol);
     cout << " ~$ ";
+    // Méthode feignasse :
     stringstream rep;
     string strrep;
     getline(cin, strrep);
@@ -33,7 +34,6 @@ void mainInput(Env &env){
         env.args.push_back(newArg);
         newArg.clear();
     }
-
 }
 
 string basicInput(){

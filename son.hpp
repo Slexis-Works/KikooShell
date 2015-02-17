@@ -17,6 +17,7 @@
 
 // Flags d'un son
 #define F_SM_SYNC   1<<0 // Fonctionnement synchrone, ne retourne pas tant que le son n'a pas fini de jouer
+#define F_SM_THREAD 1<<1
 // Flags de la méthode say
 #define F_SMS_NODISP    1<<8 // Affiche "Fauw aykoutay..." pour s'il n'y a pas de son
 
@@ -49,6 +50,5 @@ private:
     vector< Track >  m_sons;
     sf::Int32 m_nbSnd;
 };
-
 
 #endif // SON_HPP_INCLUDED

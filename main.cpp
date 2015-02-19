@@ -1,5 +1,8 @@
 #include "main.hpp"
 
+// @FIXME IconPro ne semble pas vraiment enregistrer en 8 bpp, ou alors Windaube sait pas lire
+// @TODO Mettre iconSmall sur le shell, et le grand en Alt+Tab
+
 int main(int argc, char *argv[]){
 
     // Main Inits
@@ -92,7 +95,7 @@ int main(int argc, char *argv[]){
         }
     }while(env.userName.empty());
 
-    env.cwd="|laYgen|" + env.userName + "|maidocs";
+    env.cwd="|laYgen|" + env.userName + "|maidocs|";
     setCCol(env.bgCol| 3 | FOREGROUND_INTENSITY);
     cout << endl << "Bhyaimveunuhe " << env.userName << " !" << endl;
     cout << "Chayl spayssyalysay en kikoOscript v. 0.1" << endl;
@@ -115,9 +118,9 @@ int main(int argc, char *argv[]){
                 string nPath(env.args[0]);
                 if(nPath.find('/')==string::npos && nPath.find('\\')==string::npos){
                     if(nPath[0]=='|'){
-                        env.cwd=nPath;
+                        env.cwd=nPath + (nPath[nPath.size()-1]=='|'?"":"|");
                     }else{
-                        env.cwd+='|' + nPath;
+                        env.cwd+=nPath + (nPath[nPath.size()-1]=='|'?"":"|");
                     }
                     cout << "Jeuh man tap deuh si sa egzeest." << endl;
                     // Quand même gérer à partir du dossier courant... ./ t'insulte, ../ remonte mais pas trop, / root
@@ -303,7 +306,12 @@ int main(int argc, char *argv[]){
         }else if(env.cmd=="help" || env.cmd=="aide" || env.cmd=="?"){
             SM.say("Désolé moi pas comprendre. Toi devoir mettre haylp, fomayday, ou ausekoure.");
 
+
         // Trucs qui n'ont rien à voir avec l'OS, mais dans l'esprit
+        }else if(env.cmd=="Commande"){
+            SM.say("L'art, tout ça, c'est la Significiance incarnée.", "Bicool");
+        }else if(env.cmd=="faye"){
+            launchNav("fayedu39.1s.fr");
         }else if(env.cmd=="wacist"){
             env.defVoice="Zozo";
             SM.sayRand({
@@ -501,6 +509,7 @@ int main(int argc, char *argv[]){
                 //if(!rand()) system("echo ^G"); Si c'est pas fait directement
             }
             return 0;
+
         // Reste à unifier les exécutables, ou balancer la commande dans le vide, si Windows le fait
         }else if(env.cmd=="exec"){
             if(env.args.size()){
@@ -525,7 +534,11 @@ int main(int argc, char *argv[]){
             }
         }else if(env.cmd=="launch"){
             if(env.args.size()){
-                executeOutside(env.args[0]);
+                ReturnedError ret;
+                ret=executeOutside(env.args[0]);
+                if(ret.isError){
+                    cout << ret.errorMsg << (ret.winId?ret.errorMsg:"") << endl;
+                }
             }
 
         // Bonus

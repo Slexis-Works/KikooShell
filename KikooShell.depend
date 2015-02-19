@@ -7,18 +7,18 @@
 	<fstream>
 	<windows.h>
 
-1423690189 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\outputfuncs.cpp
+1424268588 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\outputfuncs.cpp
 	"outputFuncs.hpp"
 
-1423688671 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\outputfuncs.hpp
+1424379851 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\outputfuncs.hpp
 	<windows.h>
 	<iostream>
 	"mainStructs.hpp"
 
-1424209729 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\main.cpp
+1424268100 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\main.cpp
 	"main.hpp"
 
-1423852977 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\main.hpp
+1424282307 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\main.hpp
 	<iostream>
 	<fstream>
 	<windows.h>
@@ -301,6 +301,10 @@
 
 1423852174 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\progfuncs.cpp
 
-1424210349 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\progfuncs.hpp
+1424268066 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\progfuncs.hpp
 	"mainStructs.hpp"
+
+1424282255 c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\rsrcs.rc
+
+1424379093 source:c:\documents and settings\alexis\mes documents\scripts\c\kikooshell\rsrcs.rc
 

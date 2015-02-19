@@ -53,6 +53,9 @@
 		<Unit filename="outputFuncs.hpp" />
 		<Unit filename="progFuncs.cpp" />
 		<Unit filename="progFuncs.hpp" />
+		<Unit filename="rsrcs.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Unit filename="son.cpp" />
 		<Unit filename="son.hpp" />
 		<Extensions>

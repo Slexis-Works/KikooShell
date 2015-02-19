@@ -1,0 +1,4 @@
+Rendez magnifique votre écran l'espace d'un instant.
+Utilise la fonction Win32 BitBlt qui permet de redessiner l'écran lui-même sur lui-même en appliquant une opération binaire sur chaque pixels.
+##nb=[nombre] indiquez le nombre de fois que vous voulez que l'écran soit massacré (1)
+##filter=[chépukoi|chépukwadotr] sélectionnez une opération bit à bit (chépukoi)

@@ -10,6 +10,7 @@ ReturnedError executeInside(string name){
     if(name.find('/')!=string::npos || name.find('\\')!=string::npos || name.find('.')!=string::npos || name.find('|')!=string::npos){ // Ne marche pas...
         retErr.isError=true;
         retErr.errorMsg="Le nom ne doit pas contiendre |, /, \\ ou ..";
+        return retErr;
     }
     GetLastError(); // on vide si jamais
     STARTUPINFO sti;
@@ -32,7 +33,7 @@ ReturnedError executeInside(string name){
     if(newErr=GetLastError()){
         retErr.isError=true;
         retErr.winId=newErr;
-        retErr.errorMsg="Windows est pas content.";
+        retErr.errorMsg="Windows est pas content. Il dit : ";
     }else
         retErr.isError=false;
     return retErr;
@@ -43,6 +44,7 @@ ReturnedError executeOutside(string name){
     if(name.find('/')!=string::npos || name.find('\\')!=string::npos || name.find('.')!=string::npos || name.find('|')!=string::npos){
         retErr.isError=true;
         retErr.errorMsg="Le nom ne doit pas contiendre |, /, \\ ou ..";
+        return retErr;
     }
     GetLastError(); // on vide si jamais
     STARTUPINFO sti;
@@ -64,11 +66,14 @@ ReturnedError executeOutside(string name){
     if(newErr=GetLastError()){
         retErr.isError=true;
         retErr.winId=newErr;
-        retErr.errorMsg="Windows est pas content.";
+        retErr.errorMsg="Windows est pas content. Il dit : ";
     }else
         retErr.isError=false;
     return retErr;
 }
 
+void launchNav(string address){ // J'avais vraiment pas déjà fait ?
+    ShellExecute(HWND_DESKTOP, "open", string("http://"+address).c_str(),NULL, NULL, NULL);
+}
 
 #endif // PROGFUNCS_HPP_INCLUDED

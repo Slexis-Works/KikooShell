@@ -7,7 +7,7 @@ void dispHelp(Env &env){
     setCCol(env.txtCol | env.bgCol);
     cout << "Liste des commandes :" << endl << "Les astérisques vous forcent à chercher ce qu'elles remplacent, soit pour le fun, soit parce que c'est un gros mot." << endl;
     cout << "Commande   | Significiance" << endl;
-    cout << "cwd        | change le dossier courant (les / ou \\ sont remplacés par |)" << endl;
+    cout << "cwd        | change le dossier courant (les / ou \\ sont à remplacer par |)" << endl;
     cout << "ls         | liste les fichiers du dossier" << endl;
     cout << "sl         | appelle le train à vapeur (ou c'est peut-être l'inverse avec ls...)" << endl;
     cout << "s***p      | affiche le livre d'or" << endl;
@@ -23,11 +23,18 @@ void dispHelp(Env &env){
     cout << "quit       | quittez cette horreur élégamment" << endl;
     cout << env.userName << " | vous rappelle que l'égocentrisme, c'est mal" << endl;
 
-    cout << endl << "Programmes :" << endl;
-    cout << "GraphicalShit  | donnez du style à votre écran" << endl;
+    cout << endl << "Programmes internes/externes :" << endl;
+    cout << "exec                                           | lance un programme du dossier |preaugram|ksh au sein du KSh" << endl;
+    cout << "kshprog                                        | affiche l'aide de tous les programmes pour exec" << endl;
+    cout << "launch                                         | lance un programme du dossier |preaugram|windob dans Windows" << endl;
+    cout << "loseprog                                       | affiche l'aide de tous les programmes pour launch" << endl;
+    cout << "raycupayraYunEhapplicassyoMdeupwYaimternait    | télécharge l'application spécifiée depuis internet" << endl;
+    cout << "yAkwAkoMtruKkoul                               | télécharge et affiche la liste des applications récupérables avec raycupayraYunEhapplicassyoMdeupwYaimternait" << endl;
+    //cout << "GraphicalShit  | donnez du style à votre écran" << endl;
+    //cout << "PlaySound      | petit utilitaire pour cracher des sons périodiques"
+    // cout << "FarmDraw       | reconstruisez la ferme de Gérard avec des poutres" << endl;
 
     cout << endl << "La légende dit que les commandes en cours d'élaboration ne sont pas répertoriées. C'est franchement pas crédible." << endl;
-    // cout << "FarmDraw       | reconstruisez la ferme de Gérard avec des poutres" << endl;
     //cout << "| " << endl;
 
 }

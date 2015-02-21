@@ -1,0 +1,6 @@
+#Fichiers à ne pas inclure
+KikooShell.depend
+KikooShell.layout
+
+# Dossiers à ne pas inclure
+obj/

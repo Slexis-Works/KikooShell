@@ -1,19 +1,7 @@
 #ifndef SON_HPP_INCLUDED
 #define SON_HPP_INCLUDED
 
-#include <iostream>
-#include <wininet.h>
-#include <vector>
-#include <string>
-#include <random>
-#include <time.h>
-#include <sstream>
-#include <fstream>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
-
-#include "mainStructs.hpp"
-#include "outputFuncs.hpp"
+#include "Env.hpp"
 
 // Flags d'un son
 #define F_SM_SYNC   1<<0 // Fonctionnement synchrone, ne retourne pas tant que le son n'a pas fini de jouer
@@ -24,13 +12,8 @@
 
 using namespace std;
 
-struct Track{
-    sf::Music* music;
-    string path;
-    unsigned char flags;
-};
 
-class SoundManager{
+/*class SoundManager{
 public:
     SoundManager(Env &env);
     ~SoundManager();
@@ -49,6 +32,6 @@ private:
 
     vector< Track >  m_sons;
     sf::Int32 m_nbSnd;
-};
+};*/
 
 #endif // SON_HPP_INCLUDED

@@ -1,7 +1,7 @@
 #ifndef PROGFUNCS_HPP_INCLUDED
 #define PROGFUNCS_HPP_INCLUDED
 
-#include "mainStructs.hpp"
+#include "Env.hpp"
 
 
 

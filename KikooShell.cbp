@@ -44,6 +44,8 @@
 			<Add library="crypt32" />
 			<Add directory="C:/Documents and Settings/alexis/Mes documents/scripts/libs/SFML-2.2/lib" />
 		</Linker>
+		<Unit filename="Env.cpp" />
+		<Unit filename="Env.hpp" />
 		<Unit filename="inputFuncs.cpp" />
 		<Unit filename="inputFuncs.hpp" />
 		<Unit filename="main.cpp" />

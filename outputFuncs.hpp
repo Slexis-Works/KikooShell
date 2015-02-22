@@ -4,9 +4,8 @@
 #include <windows.h>
 #include <iostream>
 
-#include "mainStructs.hpp"
+#include "Env.hpp"
 
-#define FOREGROUND_WHITE 7
 #define setCCol(flags) SetConsoleTextAttribute(env.cO, flags)
 
 void dispHelp(Env &env);

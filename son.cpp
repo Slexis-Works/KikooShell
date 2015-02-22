@@ -1,20 +1,11 @@
 #include "son.hpp"
 
-
-SoundManager::SoundManager(Env &env) : m_nbSnd(0), m_env(env)
-{
-    srand(time(NULL));
+void Env::setVoice(string nV){
+    // @TODO Vérifier que la voix est disponible
+    m_voice=nV;
 }
 
-SoundManager::~SoundManager(){
-    for(size_t i=0; i<m_sons.size(); i++){
-        delete m_sons[i].music;
-        //cout << "Suppression de " << m_sons[i].second;
-        m_sons.erase(m_sons.begin()+i);
-    }
-}
-
-bool SoundManager::play(string path, sf::Uint8 flags){
+bool Env::play(string path, sf::Uint8 flags){
     if(flags&F_SM_SYNC){
         sf::Music music;
         music.openFromFile(path);
@@ -38,7 +29,7 @@ bool SoundManager::play(string path, sf::Uint8 flags){
     return true;
 }
 
-void SoundManager::cleanStop(){
+void Env::cleanStop(){
     for(size_t i=0; i<m_sons.size(); i++){
         if(m_sons[i].music->getStatus()==sf::Sound::Stopped){
             delete m_sons[i].music;
@@ -54,11 +45,11 @@ void SoundManager::cleanStop(){
 
 }
 
-bool SoundManager::say(const char text[], sf::Uint16 flags){
+bool Env::say(const char text[], sf::Uint16 flags){
     // TODO Vérifier en MD5 si le truc n'a pas déjà été DL, puisqu'on rm qu'à la fin. Le HMAC serait-il utile du coup... ?
     // Se référer à http://ws.voxygen.fr/documentation.html
     if(!(flags&F_SMS_NODISP))
-        cout << "Fauw aykoutay " << m_env.defVoice << " deer \"" << text << '"' << endl;
+        cout << "Fauw aykoutay " << m_voice << " deer \"" << text << '"' << endl;
 
     sf::Http http;
     http.setHost("http://voxygen.fr/");
@@ -78,7 +69,7 @@ bool SoundManager::say(const char text[], sf::Uint16 flags){
     //cout << "Encoded : " << charBef << " from " << encTxt << endl;
     //delete charEnc;
 
-    req.setUri("/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&text="+encTxt+"&header=headerless&coding=ogg%3A1.0&voice="+m_env.defVoice); // ogg:1.0 désigne le format et la qualité. 0.0 ne semble que baisser le volume...
+    req.setUri("/sites/all/modules/voxygen_voices/assets/proxy/index.php?method=redirect&text="+encTxt+"&header=headerless&coding=ogg%3A1.0&voice="+m_voice); // ogg:1.0 désigne le format et la qualité. 0.0 ne semble que baisser le volume...
     sf::Http::Response rep(http.sendRequest(req));
     //cout << "Status " << rep.getStatus() << endl;
     string newPath(rep.getField("Location"));
@@ -122,7 +113,7 @@ bool SoundManager::say(const char text[], sf::Uint16 flags){
     }
 }
 
-bool SoundManager::say(const char text[], string voice, sf::Uint16 flags){
+bool Env::say(const char text[], string voice, sf::Uint16 flags){
     if(!(flags&F_SMS_NODISP))
         cout << "Fauw aykoutay " << voice << " deer \"" << text << '"' << endl;
 
@@ -142,9 +133,10 @@ bool SoundManager::say(const char text[], string voice, sf::Uint16 flags){
     sf::Http::Response rep(http.sendRequest(req));
     string newPath(rep.getField("Location"));
     if(newPath.size()<21){
-        SetConsoleTextAttribute(m_env.cO,FOREGROUND_RED);
-        cout << "Flaim deuh shershé leuh som (statue " << rep.getStatus() << ")" << endl;
-        SetConsoleTextAttribute(m_env.cO, m_env.bgCol|m_env.txtCol);
+        stringstream errMsg;
+        errMsg << "Flaim deuh shershé leuh som (statue " << rep.getStatus() << ")";
+        err(errMsg.str());
+        cout << endl << "Faudray vayrifyay day truuk kan mem. Jeanr ton daikaudeur TNT." << endl;
         return false;
     }
     http.setHost("http://ws.voxygen.fr");
@@ -163,18 +155,18 @@ bool SoundManager::say(const char text[], string voice, sf::Uint16 flags){
         play(sFileName.str(), flags&0xFF);
         return true;
     }else{
-        SetConsoleTextAttribute(m_env.cO,FOREGROUND_RED);
-        cout << "Impossible de charger le son depuis http://ws.voxygen.fr" << newPath.substr(20) << endl;
-        SetConsoleTextAttribute(m_env.cO, m_env.bgCol|m_env.txtCol);
-        cout << endl << endl << "Faudray vayrifyay day truuk kan mem." << endl;
+        stringstream errMsg;
+        errMsg << "Flaim deuh shershé leuh som (statue " << rep.getStatus() << ")";
+        err(errMsg.str());
+        cout << endl << "Faudray vayrifyay day truuk kan mem. Jeanr ton daikaudeur TNT." << endl;
         return false;
     }
 }
 
 
-bool SoundManager::sayRand(vector<string> possib, sf::Uint16 flags){
+bool Env::sayRand(vector<string> possib, sf::Uint16 flags){
     return say(possib[rand()%possib.size()].c_str(), flags);
 }
-bool SoundManager::sayRand(vector<string> possib, string voice, sf::Uint16 flags){
+bool Env::sayRand(vector<string> possib, string voice, sf::Uint16 flags){
     return say(possib[rand()%possib.size()].c_str(), voice, flags);
 }

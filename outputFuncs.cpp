@@ -2,9 +2,9 @@
 
 void dispHelp(Env &env){
     env.helpnxt=HelpNext::None;
-    setCCol(FOREGROUND_GREEN | FOREGROUND_INTENSITY | env.bgCol);
+    env.tCol(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     cout << "L'aide trop utile de Gérard :" << endl;
-    setCCol(env.txtCol | env.bgCol);
+    env.dCol();
     cout << "Liste des commandes :" << endl << "Les astérisques vous forcent à chercher ce qu'elles remplacent, soit pour le fun, soit parce que c'est un gros mot." << endl;
     cout << "Commande   | Significiance" << endl;
     cout << "cwd        | change le dossier courant (les / ou \\ sont à remplacer par |)" << endl;

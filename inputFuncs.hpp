@@ -8,7 +8,7 @@
 #include <sstream>
 
 #include "outputFuncs.hpp"
-#include "mainStructs.hpp"
+#include "Env.hpp"
 
 void mainInput(Env &env);
 #define _mainInput() mainInput(env)

@@ -1,10 +1,10 @@
 // Pack d'icônes standars pour l'icône de l'application
-100 ICON "bin/Release/root/trhuKaintern/ykaune/mainIconBig.ico"
-101 ICON "bin/Release/root/trhuKaintern/ykaune/mainIconNormal.ico"
-102 ICON "bin/Release/root/trhuKaintern/ykaune/mainIconSmall.ico"
-// Pack bonus pour ceux qui savent changer l'icône d'un exécutable
-103 ICON "bin/Release/root/trhuKaintern/ykaune/altIconHap.ico"
-104 ICON "bin/Release/root/trhuKaintern/ykaune/altIconLuigimmonde.ico"
-105 ICON "bin/Release/root/trhuKaintern/ykaune/altIconTrobelpoule.ico"
-106 ICON "bin/Release/root/trhuKaintern/ykaune/altIconRaoul.ico"
-//103 ICON "bin/Release/root/trhuKaintern/ykaune/altIcon.ico"
+100 ICON "root/trhuKaintern/ykaune/mainIcon.ico"
+// Pack bonus pour ceux qui savent changer l'icône d'un raccourci ou de l'exécutable
+101 ICON "root/trhuKaintern/ykaune/KShAltIconHap.ico"
+102 ICON "root/trhuKaintern/ykaune/KShAltIconLuigimmonde.ico"
+103 ICON "root/trhuKaintern/ykaune/KShAltIconTrobelpoule.ico"
+104 ICON "root/trhuKaintern/ykaune/KShAltIconRaoul.ico"
+105 ICON "root/trhuKaintern/ykaune/KShAltIconDora.ico"
+106 ICON "root/trhuKaintern/ykaune/KShAltIconPwet.ico"
+//107 ICON "root/trhuKaintern/ykaune/KShAltIcon.ico"

@@ -9,16 +9,16 @@ void mainInput(Env &env){
     // Les mains sales encrassent l'écran
     env.dirt++;
     if(env.dirt>env.maxDirt){
-        env.txtCol=0;
+        env.stCol(0);
     }else if(env.dirt==env.maxDirt){
-        env.txtCol=FOREGROUND_INTENSITY;
+        env.stCol(FOREGROUND_INTENSITY);
     }else if(env.dirt>env.maxDirt-5){
-        env.txtCol&=~FOREGROUND_INTENSITY;
+        env.darkenTxt();
     }
 
-    setCCol(env.bgCol|FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    env.tCol(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     cout << "=ndaube ] " << env.cwd;
-    setCCol(env.bgCol|env.txtCol);
+    env.dCol();
     cout << " ~$ ";
     // Méthode feignasse :
     stringstream rep;

@@ -4,21 +4,8 @@
 // @TODO Mettre iconSmall sur le shell, et le grand en Alt+Tab
 
 int main(int argc, char *argv[]){
-
     // Main Inits
     Env env;
-    SoundManager SM(env);
-
-    env.dirt=0;
-    env.maxDirt=15; // 10 pour bien faire c
-    env.txtCol=FOREGROUND_WHITE | FOREGROUND_INTENSITY;
-    env.bgCol=0;
-    env.defVoice="JeanJean";
-    env.helpnxt=HelpNext::None;
-
-    // Win32 inits
-    env.cI=GetStdHandle(STD_INPUT_HANDLE);
-    env.cO=GetStdHandle(STD_OUTPUT_HANDLE);
 
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(env.cO, &csbi);
@@ -40,7 +27,7 @@ int main(int argc, char *argv[]){
     srand(time(NULL));
 
 
-    setCCol(env.bgCol|FOREGROUND_GREEN);
+    env.tCol(FOREGROUND_GREEN);
     cout << "kikoOshell 0.3 ";
     // Afficher l'heure et une phrase débile
     { // Scope pour grosse variable temporaire, m'enfin à voir comment c'est mis en mémoire...
@@ -50,14 +37,14 @@ int main(int argc, char *argv[]){
             "Garanti ou intégralement remboursé !",
             "Cliquez ici pour avoir l'OS en français. Ou là..."
         };
-        setCCol(env.bgCol|FOREGROUND_GREEN|FOREGROUND_INTENSITY);
+        env.tCol(FOREGROUND_GREEN|FOREGROUND_INTENSITY);
         cout << phrases[rand()%4].c_str() << endl;
 
     }
 
-    setCCol(env.bgCol|FOREGROUND_RED | FOREGROUND_INTENSITY);
+    env.tCol(FOREGROUND_RED | FOREGROUND_INTENSITY);
     cout << "Now loading!" << endl;
-    setCCol(env.bgCol|FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+    env.tCol(FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     cout << "For your pleasure!" << endl;
     for(unsigned char nbM=0;nbM<10;nbM++){
         COORD matrixPos; // FIXME Pas forcément 3 suivant les dimensions de la fenêtre
@@ -75,7 +62,7 @@ int main(int argc, char *argv[]){
     }
     system("cls");
     cout << "Automaticly switched language to: Frremçèh" << endl << endl;
-    setCCol(env.bgCol|env.txtCol);
+    env.dCol();
     Sleep(1000+rand()%1000);
     do{
         cout << "Vautre heedantiphyam : ";
@@ -96,11 +83,11 @@ int main(int argc, char *argv[]){
     }while(env.userName.empty());
 
     env.cwd="|laYgen|" + env.userName + "|maidocs|";
-    setCCol(env.bgCol| 3 | FOREGROUND_INTENSITY);
+    env.tCol(FOREGROUND_BLUE|FOREGROUND_GREEN|FOREGROUND_INTENSITY);
     cout << endl << "Bhyaimveunuhe " << env.userName << " !" << endl;
     cout << "Chayl spayssyalysay en kikoOscript v. 0.1" << endl;
     cout << "127.0.0.1 sur localhost" << endl << endl;
-    setCCol(env.bgCol|env.txtCol);
+    env.dCol();
 
     do{
         _mainInput();
@@ -115,6 +102,7 @@ int main(int argc, char *argv[]){
 
         if(env.cmd=="cwd"){
             if(env.args.size()){
+                env.addPath(env.args[0]);
                 string nPath(env.args[0]);
                 if(nPath.find('/')==string::npos && nPath.find('\\')==string::npos){
                     if(nPath[0]=='|'){
@@ -132,9 +120,9 @@ int main(int argc, char *argv[]){
                 cout << "Koman tahe ooblyay un daussyay !" << endl;
             }
         }else if(env.cmd=="ls"){
-            SM.say("Ben alors la machine à vapeur elle devrait traverser l'écran. Sauf que la SNCF est encore en grève. Salauds de pauvres !");
-            //SM.say("Woufwouwouwouwouwfoufw ah"); On dirait Fak u Gooby
-            //SM.say("Bien le bonjour les gens.");
+            env.say("Ben alors la machine à vapeur elle devrait traverser l'écran. Sauf que la SNCF est encore en grève. Salauds de pauvres !");
+            //env.say("Woufwouwouwouwouwfoufw ah"); On dirait Fak u Gooby
+            //env.say("Bien le bonjour les gens.");
         }else if(env.cmd=="sl"){
             /*cout << "Des trucs" << endl;
             cout << "Probablement d'autres trucs..." << endl;
@@ -142,32 +130,32 @@ int main(int argc, char *argv[]){
             string sPath(env.cwd);
             replace(sPath.begin(), sPath.end(), '|', '\\');
             cout << "Contenu de " << sPath << " :" << endl;
-            sPath="..\\root\\"+sPath.substr(1)+"\\*";
+            sPath="..\\root"+sPath+"*";
             CHAR pathToSearch[MAX_PATH];
             strcpy(pathToSearch, sPath.c_str());
             WIN32_FIND_DATA ffd;
             HANDLE hFind=FindFirstFile(pathToSearch, &ffd);
             LARGE_INTEGER fileSize;
             if(hFind==INVALID_HANDLE_VALUE){
-                SM.say("J'arrive pas à ouvrir le dossier. Narmol, narmol.");
+                env.say("J'arrive pas à ouvrir le dossier. Narmol, narmol.");
                 cout << "Dossier cherché : " << pathToSearch << endl;
             }else{
                 do{
                     if(ffd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY){
                         cout << "Dossier : ";
                         if(ffd.dwFileAttributes&(FILE_ATTRIBUTE_COMPRESSED|FILE_ATTRIBUTE_ARCHIVE|FILE_ATTRIBUTE_ENCRYPTED)){
-                            setCCol(env.bgCol|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+                            env.tCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY);
                             cout << ffd.cFileName << endl;
-                            setCCol(env.bgCol|env.txtCol);
+                            env.dCol();
                         }else
                             cout << ffd.cFileName << endl;
                         sf::sleep(sf::milliseconds(50));
                     }else{
                         cout << "Fichier : ";
                         if(ffd.dwFileAttributes&(FILE_ATTRIBUTE_COMPRESSED|FILE_ATTRIBUTE_ARCHIVE|FILE_ATTRIBUTE_ENCRYPTED|FILE_ATTRIBUTE_SPARSE_FILE)){
-                            setCCol(env.bgCol|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+                            env.tCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY);
                             cout << ffd.cFileName;
-                            setCCol(env.bgCol|env.txtCol);
+                            env.dCol();
                         }else
                             cout << ffd.cFileName;
                         fileSize.LowPart=ffd.nFileSizeLow;
@@ -183,14 +171,14 @@ int main(int argc, char *argv[]){
             }
 
         }else if(env.cmd=="sleep"){
-            SM.sayRand({
+            env.sayRand({
                 "J'me taperais bien une p'tite sieste.",
                 "Regardez tous ces gens trop contents !",
                 "J'allions me suicider. Parce que pour dormir c'est top."
             });
-            setCCol(env.bgCol|FOREGROUND_GREEN | FOREGROUND_RED);
+            env.tCol(FOREGROUND_GREEN | FOREGROUND_RED);
             cout << "Livre dort :" << endl;
-            setCCol(env.bgCol|env.txtCol);
+            env.dCol();
             cout << "- EKShellent !" << endl << "   Jerry Traifaur" << endl;
             cout << "- Au moins ça plante moins que Windows." << endl << "   Roger Toukompry" << endl;
             cout << "- anph1 hum os adap t o jem naurmo" << endl << "   Jean-Kévin Kikoo" << endl;
@@ -198,39 +186,36 @@ int main(int argc, char *argv[]){
         }else if(env.cmd=="kouleur"){
             if(env.args.size()){
                 if(env.dirt>env.maxDirt-2){
-                    SM.say("Désolé, mais c'est trop crade pour mettre de la couleur.");
+                    env.say("Désolé, mais c'est trop crade pour mettre de la couleur.");
                 }else{
                     if(env.args[0]=="rooj"){
-                        env.txtCol=FOREGROUND_RED | FOREGROUND_INTENSITY;
-                        setCCol(env.bgCol|FOREGROUND_RED | FOREGROUND_INTENSITY);
-                        SM.say("Rouge, c'est la couleur de Gertrude quand elle est en colère.");
+                        env.stCol(FOREGROUND_RED | FOREGROUND_INTENSITY);
+                        env.say("Rouge, c'est la couleur de Gertrude quand elle est en colère.");
                     }else if(env.args[0]=="vair"){
-                        env.txtCol=FOREGROUND_GREEN | FOREGROUND_INTENSITY;
-                        setCCol(env.bgCol|FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-                        SM.say("Vert, ça me rappelle le lait que m'offrent les poules tous les soirs.");
+                        env.stCol(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                        env.say("Vert, ça me rappelle le lait que m'offrent les poules tous les soirs.");
                     }else if(env.args[0]=="bleu"){
-                        env.txtCol=FOREGROUND_BLUE | FOREGROUND_INTENSITY;
-                        setCCol(env.bgCol|FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-                        SM.say("Bleu, ben ça c'est les beaux paturages où y'a Raoul et son tracteur.");
+                        env.stCol(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+                        env.say("Bleu, ben ça c'est les beaux paturages où y'a Raoul et son tracteur.");
                     }else{
                         cout << "Clampin, faut mettre ";
-                        setCCol(env.bgCol|FOREGROUND_RED|FOREGROUND_INTENSITY); cout << "rooj ";
-                        setCCol(env.bgCol|FOREGROUND_GREEN|FOREGROUND_INTENSITY); cout << "vair ";
-                        setCCol(env.bgCol|env.txtCol); cout << "ou bien ";
-                        setCCol(env.bgCol|FOREGROUND_BLUE|FOREGROUND_INTENSITY); cout << "bleu ";
-                        setCCol(env.bgCol|env.txtCol); cout << "en plus." << endl;
+                        env.tCol(FOREGROUND_RED|FOREGROUND_INTENSITY); cout << "rooj ";
+                        env.tCol(FOREGROUND_GREEN|FOREGROUND_INTENSITY); cout << "vair ";
+                        env.dCol(); cout << "ou bien ";
+                        env.tCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY); cout << "bleu ";
+                        env.dCol(); cout << "en plus." << endl;
                     }
                 }
             }else{
                 cout << "Clampin, faut mettre ";
-                setCCol(env.bgCol|FOREGROUND_RED|FOREGROUND_INTENSITY); cout << "rooj ";
-                setCCol(env.bgCol|FOREGROUND_GREEN|FOREGROUND_INTENSITY); cout << "vair ";
-                setCCol(env.bgCol|env.txtCol); cout << "ou bien ";
-                setCCol(env.bgCol|FOREGROUND_BLUE|FOREGROUND_INTENSITY); cout << "bleu ";
-                setCCol(env.bgCol|env.txtCol); cout << "en plus." << endl;
+                env.tCol(FOREGROUND_RED|FOREGROUND_INTENSITY); cout << "rooj ";
+                env.tCol(FOREGROUND_GREEN|FOREGROUND_INTENSITY); cout << "vair ";
+                env.dCol(); cout << "ou bien ";
+                env.tCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY); cout << "bleu ";
+                env.dCol(); cout << "en plus." << endl;
             }
         }else if(env.cmd=="makeclean"){
-            SM.sayRand({
+            env.sayRand({
                 "J'ai amené la brosse à dent avec laquelle je nettoie le tracteur.",
                 "Ben. Allons dans la salle de. Ben.",
                 "Attention ça va faire plein de bubulles !",
@@ -239,34 +224,34 @@ int main(int argc, char *argv[]){
             system("CLS");
 
             if(env.dirt>=env.maxDirt){
-                SM.say("C'était tellement crade que j'ai paumé la couleur.", F_SM_SYNC | F_SMS_NODISP);
-                env.txtCol=FOREGROUND_WHITE | FOREGROUND_INTENSITY;
+                env.say("C'était tellement crade que j'ai paumé la couleur.", F_SM_SYNC | F_SMS_NODISP);
+                env.stCol(FOREGROUND_WHITE | FOREGROUND_INTENSITY);
                 env.dirt=0;
                 if(env.dirt==env.maxDirt){
-                    env.txtCol=0;
-                    SM.say("C'est trop crade ! J'arrive pas à récurer. Faudrait changer ou rebooter.", F_SMS_NODISP);
+                    env.stCol(0);
+                    env.say("C'est trop crade ! J'arrive pas à récurer. Faudrait changer ou rebooter.", F_SMS_NODISP);
                 }else{
                     env.maxDirt--;
                     if(env.dirt==env.maxDirt){
-                        env.txtCol=FOREGROUND_INTENSITY;
-                        SM.say("J'ai fait du mieux qu'j'ai pu, mais ça va pas tiendrer longtemps.", F_SMS_NODISP);
+                        env.stCol(FOREGROUND_INTENSITY);
+                        env.say("J'ai fait du mieux qu'j'ai pu, mais ça va pas tiendrer longtemps.", F_SMS_NODISP);
                     }else if(env.dirt>env.maxDirt-5){
-                        env.txtCol&=~FOREGROUND_INTENSITY;
+                        env.darkenTxt();
                     }
                 }
             }else{
                 env.dirt=0;
                 env.maxDirt--;
                 if(env.dirt==env.maxDirt){
-                    env.txtCol=FOREGROUND_INTENSITY;
-                    SM.say("J'ai fait du mieux qu'j'ai pu, mais ça va pas tiendrer longtemps.", F_SMS_NODISP);
+                    env.stCol(FOREGROUND_INTENSITY);
+                    env.say("J'ai fait du mieux qu'j'ai pu, mais ça va pas tiendrer longtemps.", F_SMS_NODISP);
                 }else if(env.dirt>env.maxDirt-5){
-                    env.txtCol&=~FOREGROUND_INTENSITY;
+                    env.darkenTxt();
                 }else
-                    env.txtCol|=FOREGROUND_INTENSITY;
+                    env.enlightTxt();
             }
         }else if(env.cmd=="reboot"){
-            SM.sayRand({
+            env.sayRand({
                 "Surtout regardez pas le code source.",
                 "Heu, évitez de le faire MAX_CALL_STACK fois.",
                 "Encore un qu'a tout dégueulassé et qui rachète plutôt que de faire le ménage hein !"
@@ -275,7 +260,7 @@ int main(int argc, char *argv[]){
             return main(argc, argv);
         }else if(env.cmd=="ping" || env.cmd=="pong"){ // pOng en multi ? Ou param
             system("CLS");
-            SM.say("Veuillez patienter.", F_SMS_NODISP | F_SM_SYNC);
+            env.say("Veuillez patienter.", F_SMS_NODISP | F_SM_SYNC);
             bool ballX(false), ballY(false);
             unsigned char j1X, j2X;
             //while(getchar!="ESC")
@@ -286,41 +271,41 @@ int main(int argc, char *argv[]){
             if(env.helpnxt==HelpNext::Haylp){
                 dispHelp(env);
             }else{
-                SM.say("Nan en fait faut mettre fomayday !");
+                env.say("Nan en fait faut mettre fomayday !");
                 env.helpnxt=HelpNext::Ausekoure;
             }
         }else if(env.cmd=="fomayday"){
             if(env.helpnxt==HelpNext::Fomayday){
                 dispHelp(env);
             }else{
-                SM.say("Je confonds désolé, faut mettre ausekoure");
+                env.say("Je confonds désolé, faut mettre ausekoure");
                 env.helpnxt=HelpNext::Haylp;
             }
         }else if(env.cmd=="ausekoure"){
             if(env.helpnxt==HelpNext::Ausekoure){
                 dispHelp(env);
             }else{
-                SM.say("Loupé, c'était haylp !");
+                env.say("Loupé, c'était haylp !");
                 env.helpnxt=HelpNext::Fomayday;
             }
         }else if(env.cmd=="help" || env.cmd=="aide" || env.cmd=="?"){
-            SM.say("Désolé moi pas comprendre. Toi devoir mettre haylp, fomayday, ou ausekoure.");
+            env.say("Désolé moi pas comprendre. Toi devoir mettre haylp, fomayday, ou ausekoure.");
 
 
         // Trucs qui n'ont rien à voir avec l'OS, mais dans l'esprit
         }else if(env.cmd=="Commande"){
-            SM.say("L'art, tout ça, c'est la Significiance incarnée.", "Bicool");
+            env.say("L'art, tout ça, c'est la Significiance incarnée.", "Bicool");
         }else if(env.cmd=="faye"){
             launchNav("fayedu39.1s.fr");
         }else if(env.cmd=="wacist"){
-            env.defVoice="Zozo";
-            SM.sayRand({
+            env.setVoice("Zozo");
+            env.sayRand({
                 "Qu'est-ce t'as t'es raciste sale tête de Javel ?",
                 "Tu veux voir ma banane ?",
                 "Vas vivre dans la saleté vilain."
             });
             system("color f8");
-            env.bgCol=BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_BLUE|BACKGROUND_INTENSITY;
+            env.sbCol(BACKGROUND_WHITE_INTENSITY);
         }else if(env.cmd=="cowsay"){
             if(env.args.size()){
                 string meuhs[]={ // Système probabiliste hautes performances
@@ -342,18 +327,18 @@ int main(int argc, char *argv[]){
                 for(size_t mot=0;mot<env.args.size();mot++)
                     cowPhrase+=" " + env.args[mot];
                 cowPhrase+=" \" " + comm[rand()%4];
-                SM.say(cowPhrase.c_str());
+                env.say(cowPhrase.c_str());
             }else{
-                SM.say("Ben la vache elle a rien à dire en ce moment.");
+                env.say("Ben la vache elle a rien à dire en ce moment.");
             }
         }else if(env.cmd=="tlecteur"){
-            SM.say("Ben y'a beaucoup de choses à dire sur les tracteurs. Parce que les tracteurs, c'est ma passion depuis que je mesure trois pommes virgule deux.");
+            env.say("Ben y'a beaucoup de choses à dire sur les tracteurs. Parce que les tracteurs, c'est ma passion depuis que je mesure trois pommes virgule deux.");
             string rep;
             do{
                 cout << "Quoi qu'tu veux voir ?" << endl;
-                setCCol(env.bgCol|FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+                env.tCol(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
                 cout << "citation    faidyver    tautologie    nada" << endl;
-                setCCol(env.bgCol|env.txtCol);
+                env.dCol();
                 rep=basicInput();
                 if(rep=="citation"){
                     string cits[]={
@@ -366,7 +351,7 @@ int main(int argc, char *argv[]){
                     };
                     int cit=rand()%3;
                     cout << cits[cit*2] << endl;
-                    SM.say((LPSTR)cits[cit*2+1].c_str(), F_SMS_NODISP);
+                    env.say((LPSTR)cits[cit*2+1].c_str(), F_SMS_NODISP);
                 }else if(rep=="faidyver"){
                     stringstream sDispStr, sGetStr;
                     sDispStr << "Le tracteur a ";
@@ -400,30 +385,30 @@ int main(int argc, char *argv[]){
                     sDispStr << lieux[rndPhrase] << ".";
                     sGetStr << lieux[rndPhrase] << ".";
                     cout << sDispStr.str() << endl;
-                    SM.say((LPSTR)sGetStr.str().c_str(), F_SMS_NODISP);
+                    env.say((LPSTR)sGetStr.str().c_str(), F_SMS_NODISP);
                 }else if(rep=="tautologie"){
                 }else if(rep!="nada"){
-                    SM.say("Mais t'es un beurdin ! Faut mettre un truc que je te propose quoi...");
+                    env.say("Mais t'es un beurdin ! Faut mettre un truc que je te propose quoi...");
                 }else{
-                    SM.say("Dommage, j'avais beaucoup de choses cools sur les tracteurs. Parce que les tracteurs, ayeux pourquoi tu me tapes ?");
+                    env.say("Dommage, j'avais beaucoup de choses cools sur les tracteurs. Parce que les tracteurs, ayeux pourquoi tu me tapes ?");
                 }
             }while(rep!="nada");
         }else if(env.cmd==":hap:"){
-            SM.say("Onche onche a gauche", F_SMS_NODISP | F_SM_SYNC);
+            env.say("Onche onche a gauche", F_SMS_NODISP | F_SM_SYNC);
             cout << "\\:hap:\\ ONSH ONSH A GOCH" << endl;
-            SM.say("Onche onche a droite", F_SMS_NODISP | F_SM_SYNC);
+            env.say("Onche onche a droite", F_SMS_NODISP | F_SM_SYNC);
             cout << "/:hap:/ ONSH ONSH A DRWAT" << endl;
-            SM.say("Onche onche au milieu", F_SMS_NODISP | F_SM_SYNC);
+            env.say("Onche onche au milieu", F_SMS_NODISP | F_SM_SYNC);
             cout << "|:hap:| ONSH ONSH AU MILYE" << endl;
-            SM.say("Onche onche en haut", F_SMS_NODISP | F_SM_SYNC);
+            env.say("Onche onche en haut", F_SMS_NODISP | F_SM_SYNC);
             cout << "\\:hap:/ ONSH ONSH AN HAU" << endl;
-            SM.say("Onche onche en bas", F_SMS_NODISP | F_SM_SYNC);
+            env.say("Onche onche en bas", F_SMS_NODISP | F_SM_SYNC);
             cout << "/:hap:\\ ONSH ONSH AN BA" << endl;
-            SM.say("Onche onche et jypsien", F_SMS_NODISP | F_SM_SYNC);
+            env.say("Onche onche et jypsien", F_SMS_NODISP | F_SM_SYNC);
             cout << "7:hap:L ONSH ONSH EGYPTI1" << endl;
-            SM.say("Onche onche ondulay !", F_SMS_NODISP | F_SM_SYNC);
+            env.say("Onche onche ondulay !", F_SMS_NODISP | F_SM_SYNC);
             cout << "~:hap:~ ONSH ONSH ONDULAY" << endl;
-            SM.say("Onche onche, tu veux du punch, petit pataponche ? Ce soir, c'est onche onche party !");
+            env.say("Onche onche, tu veux du punch, petit pataponche ? Ce soir, c'est onche onche party !");
 
             // Trow gentil ! Mais mérité.
             env.maxDirt=255;
@@ -440,8 +425,8 @@ int main(int argc, char *argv[]){
                 MessageBeep(MB_ICONERROR);
                 sf::sleep(sf::seconds(0.5));
             }
-            //SM.say("Une menace, a et T D tec T.", F_SMS_NODISP, "Agnes");
-            SM.say("Une menace, a été détectée.", "Agnes", F_SMS_NODISP);
+            //env.say("Une menace, a et T D tec T.", F_SMS_NODISP, "Agnes");
+            env.say("Une menace, a été détectée.", "Agnes", F_SMS_NODISP);
             /*for(unsigned char i=0;i<15;i++){
                 //sf::Uint64 fakeFile((rand()<<32) + rand());
                 char *fakePath=new char[3*sizeof(int)];
@@ -468,16 +453,16 @@ int main(int argc, char *argv[]){
             HANDLE hFind=FindFirstFile(pathToRead, &ffd);
             LARGE_INTEGER fileSize;
             if(hFind==INVALID_HANDLE_VALUE){
-                SM.say("T'as de la chance, je laisse ton disque dur en paix !");
+                env.say("T'as de la chance, je laisse ton disque dur en paix !");
                 continue;
             }
             do{
                 if(ffd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY){
                     cout << "Supprayssyiom duh daussyé ";
                     if(ffd.dwFileAttributes&(FILE_ATTRIBUTE_COMPRESSED|FILE_ATTRIBUTE_ARCHIVE|FILE_ATTRIBUTE_ENCRYPTED)){
-                        setCCol(env.bgCol|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+                        env.tCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY);
                         cout << ffd.cFileName;
-                        setCCol(env.bgCol|env.txtCol);
+                        env.dCol();
                     }else
                         cout << ffd.cFileName;
                     sf::sleep(sf::milliseconds(50));
@@ -485,9 +470,9 @@ int main(int argc, char *argv[]){
                 }else{
                     cout << "Dailaitage deuh " << pathToWin << "\\";
                     if(ffd.dwFileAttributes&(FILE_ATTRIBUTE_COMPRESSED|FILE_ATTRIBUTE_ARCHIVE|FILE_ATTRIBUTE_ENCRYPTED|FILE_ATTRIBUTE_SPARSE_FILE)){
-                        setCCol(env.bgCol|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+                        env.tCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY);
                         cout << ffd.cFileName;
-                        setCCol(env.bgCol|env.txtCol);
+                        env.dCol();
                     }else
                         cout << ffd.cFileName;
                     fileSize.LowPart=ffd.nFileSizeLow;
@@ -497,14 +482,14 @@ int main(int argc, char *argv[]){
                 }
             }while(FindNextFile(hFind, &ffd));
 
-            setCCol(env.bgCol|FOREGROUND_WHITE | FOREGROUND_INTENSITY);
+            env.tCol(FOREGROUND_WHITE | FOREGROUND_INTENSITY);
             if(env.cmd==":noel:")
                 cout << endl << "Pour plus de prudence pour les hapistes, votre ordinateur potentiellement rempli de documents noelistes a été formaté.";
             else
                 cout << endl << "Hé ! On ne dit pas de gros mots ! Pour la peine, je vais faire planter ton truc !";
             sf::sleep(sf::seconds(5));
             while(true){
-                setCCol(rand()%256);
+                env.Col((Flags)(rand()%256));
                 cout << (char)(rand()%256);
                 //if(!rand()) system("echo ^G"); Si c'est pas fait directement
             }
@@ -516,7 +501,7 @@ int main(int argc, char *argv[]){
                 if(env.args[0]=="GraphicalShit"){
                     if(env.args.size()>1){
                         ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , env.args[1].c_str(), NULL, 0);
-                        SM.say("Quand ça aura fini faudra faire deux fois Windows+D, sinon les gens ils vont avoir peur !"); // Le plus devient un "p'cent"
+                        env.say("Quand ça aura fini faudra faire deux fois Windows+D, sinon les gens ils vont avoir peur !"); // Le plus devient un "p'cent"
                     }else{
                         ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , NULL, NULL, 0);
                         cout << "Spécifiez un nombre pour plus de fun !" << endl;
@@ -527,9 +512,9 @@ int main(int argc, char *argv[]){
             }else{
                 cout << "Merci de spécifier un de vos exécutables, sans l'extension .exe" << endl;
                 cout << "Tapez ";
-                setCCol(FOREGROUND_GREEN|env.bgCol);
+                env.tCol(FOREGROUND_GREEN);
                 cout << "sl \"|preaugram|windob\"";
-                setCCol(env.bgCol|env.txtCol);
+                env.dCol();
                 cout << " pour en voir la liste." << endl;
             }
         }else if(env.cmd=="launch"){
@@ -543,7 +528,7 @@ int main(int argc, char *argv[]){
 
         // Bonus
         }else if(env.cmd=="fss" || env.cmd=="fsf"){
-            SM.play("trhuKaintern/mhuzyKaIshemsom/free-software-song.ogg");
+            env.play("trhuKaintern/mhuzyKaIshemsom/free-software-song.ogg");
             cout << "Join us now and share the software;" << endl;
             sf::sleep(sf::seconds(6.0f));
             cout << "You'll be free, hackers, you'll be free." << endl;
@@ -579,9 +564,9 @@ int main(int argc, char *argv[]){
             sf::sleep(sf::seconds(3.0f));
             cout << "You'll be free, hackers, you'll be free." << endl << endl;
             sf::sleep(sf::seconds(9.0f));
-            setCCol(FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+            env.tCol(FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
             cout << "*verse une larme*" << endl;
-            setCCol(env.txtCol|env.bgCol);
+            env.dCol();
         }else if(env.userName==env.cmd){
             cout << "Bravo, ça c'est ton nom d'utilisateur." << endl;
         // Si toLowerCase!=, "PAS LA PEINE DE GUEULER !" MAIS JE SUIS CALME MOI !
@@ -591,8 +576,8 @@ int main(int argc, char *argv[]){
     }while(env.cmd!="quit");
 
     cout << "Quittance..." << endl;
-    //SM.say(phrasesFin[rand()%3], F_SM_SYNC);
-    SM.sayRand({
+    //env.say(phrasesFin[rand()%3], F_SM_SYNC);
+    env.sayRand({
         "C'est triste que vous partiez déjà. Gertrude avait fait des patates.",
         "Attention aux poules dans le champ derrière la ferme. Elles n'ont pas été traites.",
         "De toutes façons je vous aimais pas.",

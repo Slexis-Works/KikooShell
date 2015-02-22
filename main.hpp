@@ -9,11 +9,11 @@
 #include <string>
 #include <algorithm>
 
-#include "mainStructs.hpp"
+#include "Env.hpp"
+#include "son.hpp"
 #include "progFuncs.hpp"
 #include "outputFuncs.hpp"
 #include "inputFuncs.hpp"
-#include "son.hpp"
 
 
 #endif // MAIN_HPP_INCLUDED

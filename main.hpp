@@ -8,6 +8,7 @@
 #include <time.h>
 #include <string>
 #include <algorithm>
+#include <SFML/Window/Keyboard.hpp> // Hop, sans gérer de dépendances
 
 #include "Env.hpp"
 #include "son.hpp"

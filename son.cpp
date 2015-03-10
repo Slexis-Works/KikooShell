@@ -6,7 +6,7 @@ void Env::setVoice(string nV){
 }
 
 bool Env::play(string path, sf::Uint8 flags){
-    if(flags&F_SM_SYNC){
+    if(flags&F_SM_SYNC){ // Si le truc plante, wait jusqu'à 2sec
         sf::Music music;
         music.openFromFile(path);
         music.play();

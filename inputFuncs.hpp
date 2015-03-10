@@ -10,6 +10,8 @@
 #include "outputFuncs.hpp"
 #include "Env.hpp"
 
+// Enum servant à la lecture char by char de l'input
+enum class ExpectChar{Param, EndError, EndFlags, EndFlag, EqualPair, EndPair};
 void mainInput(Env &env);
 #define _mainInput() mainInput(env)
 

@@ -17,8 +17,8 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/root/trhuKaintern/KikooShell" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="bin/Release/root" />
+				<Option output="root/trhuKaintern/KikooShell" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="root" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -35,17 +35,23 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="C:/Documents and Settings/alexis/Mes documents/scripts/libs/SFML-2.2/include" />
+			<Add directory="C:/Documents and Settings/alexis/Mes documents/scripts/libs/curl-7.40.0-devel-mingw32/include" />
 		</Compiler>
 		<Linker>
 			<Add library="sfml-network" />
 			<Add library="sfml-audio" />
+			<Add library="sfml-window" />
 			<Add library="sfml-system" />
 			<Add library="wininet" />
 			<Add library="crypt32" />
+			<Add library="curldll" />
 			<Add directory="C:/Documents and Settings/alexis/Mes documents/scripts/libs/SFML-2.2/lib" />
+			<Add directory="C:/Documents and Settings/alexis/Mes documents/scripts/libs/curl-7.40.0-devel-mingw32/lib" />
 		</Linker>
 		<Unit filename="Env.cpp" />
 		<Unit filename="Env.hpp" />
+		<Unit filename="curlBkps.cpp" />
+		<Unit filename="curlBkps.hpp" />
 		<Unit filename="inputFuncs.cpp" />
 		<Unit filename="inputFuncs.hpp" />
 		<Unit filename="main.cpp" />
@@ -58,6 +64,8 @@
 		<Unit filename="rsrcs.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
+		<Unit filename="save.cpp" />
+		<Unit filename="save.hpp" />
 		<Unit filename="son.cpp" />
 		<Unit filename="son.hpp" />
 		<Extensions>

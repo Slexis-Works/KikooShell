@@ -1,21 +1,32 @@
 #include "outputFuncs.hpp"
 
+void loc(unsigned short x, unsigned short y){
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),COORD{x,y});
+}
+void drawVLine(unsigned short x, unsigned short y, unsigned short h, char c){
+    for(unsigned short curY=y; curY<y+h; curY++){
+        loc(x, curY);
+        cout << c;
+    }
+}
+
 void dispHelp(Env &env){
     env.helpnxt=HelpNext::None;
     env.tCol(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     cout << "L'aide trop utile de Gérard :" << endl;
     env.dCol();
-    cout << "Liste des commandes :" << endl << "Les astérisques vous forcent à chercher ce qu'elles remplacent, soit pour le fun, soit parce que c'est un gros mot." << endl;
+    cout << "Liste des commandes :" << "Les commandes précédées de $ ont des flags optionnels. Celles précédées de ! ont au moins un flag nécessaire à son fonctionnement, sinon, qui sait ce qu'il arrivera..." << endl << "Les astérisques vous forcent à chercher ce qu'elles remplacent, soit pour le fun, soit parce que c'est un gros mot." << endl;
     cout << "Commande   | Significiance" << endl;
-    cout << "cwd        | change le dossier courant (les / ou \\ sont à remplacer par |)" << endl;
+    cout << "! cwd      | change le dossier courant (les / ou \\ sont à remplacer par |)" << endl;
     cout << "ls         | liste les fichiers du dossier" << endl;
     cout << "sl         | appelle le train à vapeur (ou c'est peut-être l'inverse avec ls...)" << endl;
     cout << "s***p      | affiche le livre d'or" << endl;
-    cout << "kouleur    | permet de changer la couleur du texte" << endl;
+    cout << "! kouleur  | permet de changer la couleur du texte" << endl;
     cout << "makeclean  | nettoie les saletés que vous avez foutues sur l'écran" << endl;
     cout << "reboot     | fait disparaître tous les soucis" << endl;
+    cout << "pong       | jouez à la version la plus fair-play du célèbre Pong" << endl;
     cout << "*acist     | manifeste votre haine envers l'accent africain" << endl;
-    cout << "cowsay     | parce que les vaches ont droit à leur temps de parole !" << endl;
+    cout << "! cowsay   | parce que les vaches ont droit à leur temps de parole !" << endl;
     cout << "tlecteur   | écoutez les histoires pationnantes de Gérard" << endl;
     cout << ":hap:      | promeut le Hapisme" << endl;
     cout << ":n**l:     | c'est interdit, merci" << endl;
@@ -38,3 +49,6 @@ void dispHelp(Env &env){
     //cout << "| " << endl;
 
 }
+
+
+

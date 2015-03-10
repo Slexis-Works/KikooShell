@@ -95,13 +95,22 @@ int main(int argc, char *argv[]){
         GetConsoleScreenBufferInfo(env.cO, &csbi);
         bufSize=csbi.dwSize;
         winSize=COORD{csbi.srWindow.Right-csbi.srWindow.Left, csbi.srWindow.Bottom-csbi.srWindow.Top};
+        winSize.X++; // D'après des observations
         winSize.Y++; // D'après des observations
         stringstream ssTitle;
         ssTitle << "KikooShell - (" << winSize.X << "x" << winSize.Y << ") Propretay : (" << (int)env.dirt << "/" << (int)env.maxDirt << ")";
         SetConsoleTitle(ssTitle.str().c_str());
 
         if(env.cmd=="cwd"){
-            if(env.args.size()){
+            string nCWD=env.args.getS("cwd");
+            if(nCWD.size()){
+                if(env.addPath(nCWD))
+                    env.cwd=nCWD;
+                else
+                    env.err("Faudrait relire des tutos quand même.");
+            }else
+                env.err("Koman tahe ooblyay un daussyay !");
+            /*if(env.args.size()){
                 env.addPath(env.args[0]);
                 string nPath(env.args[0]);
                 if(nPath.find('/')==string::npos && nPath.find('\\')==string::npos){
@@ -118,19 +127,24 @@ int main(int argc, char *argv[]){
                 }
             }else{
                 cout << "Koman tahe ooblyay un daussyay !" << endl;
-            }
+            }*/
         }else if(env.cmd=="ls"){
             env.say("Ben alors la machine à vapeur elle devrait traverser l'écran. Sauf que la SNCF est encore en grève. Salauds de pauvres !");
             //env.say("Woufwouwouwouwouwfoufw ah"); On dirait Fak u Gooby
             //env.say("Bien le bonjour les gens.");
-        }else if(env.cmd=="sl"){
+        }else if(env.cmd=="sl"){ // Demande le paramètre #leuHtip pour afficher Dossier ou Fichier
+            // Faire de l'humour noir quand c'est désert ? Comme ton compte en banque. Comme ta vie sentimentale. J'aime les desserts.
             /*cout << "Des trucs" << endl;
             cout << "Probablement d'autres trucs..." << endl;
             cout << "Et, de sûr, encore d'autres trucs." << endl;*/
+            /* Avant env.addPath et tout
             string sPath(env.cwd);
             replace(sPath.begin(), sPath.end(), '|', '\\');
             cout << "Contenu de " << sPath << " :" << endl;
-            sPath="..\\root"+sPath+"*";
+            sPath="..\\root"+sPath+"*";*/
+            string sPath(env.args.getS("scheumaim"));
+            if(env.getWinPath(sPath)){
+            sPath+="*";
             CHAR pathToSearch[MAX_PATH];
             strcpy(pathToSearch, sPath.c_str());
             WIN32_FIND_DATA ffd;
@@ -169,7 +183,21 @@ int main(int argc, char *argv[]){
                     }
                 }while(FindNextFile(hFind, &ffd));
             }
-
+            }
+        }else if(env.cmd=="cat"){
+            string filePath(env.args.getS("fichyé"));
+            if(env.getWinPath(filePath, true)){
+                ifstream fileToRead(filePath);
+                if(fileToRead){
+                    while(!fileToRead.eof()){
+                        string str;
+                        getline(fileToRead, str);
+                        cout << str << endl;
+                    }
+                }else{
+                    env.err("Impossible de trouver " + filePath);
+                }
+            } // AddPath se charge des erreurs
         }else if(env.cmd=="sleep"){
             env.sayRand({
                 "J'me taperais bien une p'tite sieste.",
@@ -184,7 +212,43 @@ int main(int argc, char *argv[]){
             cout << "- anph1 hum os adap t o jem naurmo" << endl << "   Jean-Kévin Kikoo" << endl;
             cout << "- Mais K(ikooSh)ell m*rde !" << endl << "   Un rageux." << endl;
         }else if(env.cmd=="kouleur"){
-            if(env.args.size()){
+            bool gotGood(false);
+            char fColor(0);
+            if(env.hasFlag('r') || env.hasFlag("rooj")){
+                fColor|=FOREGROUND_RED;
+                env.tCol(FOREGROUND_RED|FOREGROUND_INTENSITY);
+                env.say("Rouge, c'est la couleur de Gertrude quand elle est en colère.");
+                gotGood=true;
+            }if(env.hasFlag('v') || env.hasFlag("vair")){
+                fColor|=FOREGROUND_GREEN;
+                env.tCol(FOREGROUND_GREEN|FOREGROUND_INTENSITY);
+                env.say("Vert, ça me rappelle le lait que m'offrent les poules tous les soirs.");
+                gotGood=true;
+            }if(env.hasFlag('b') || env.hasFlag("bleu")){
+                fColor|=FOREGROUND_BLUE;
+                env.tCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+                env.say("Bleu, ben ça c'est les beaux paturages où y'a Raoul et son tracteur.");
+                gotGood=true;
+            }if(env.hasFlag('i') || env.hasFlag("himtamse")){
+                fColor|=FOREGROUND_INTENSITY;
+                env.Col(FOREGROUND_WHITE_INTENSITY);
+                env.say("Argh, mes yeux. C'est plus lumineux que dans l'étable.");
+                gotGood=true;
+            }
+            if(gotGood){
+                env.stCol(fColor); // Marche plus...
+            }else{
+                cout << "Clampin, faut mettre ";
+                env.tCol(FOREGROUND_RED|FOREGROUND_INTENSITY); cout << "#rooj ";
+                env.tCol(FOREGROUND_GREEN|FOREGROUND_INTENSITY); cout << "#vair ";
+                env.dCol(); cout << "ou bien ";
+                env.tCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY); cout << "#bleu ";
+                env.dCol(); cout << "en plus." << endl;
+                cout << "Et si t'as pas mal aux yeux, tu peux essayer ";
+                env.Col(FOREGROUND_WHITE|BACKGROUND_WHITE_INTENSITY); cout << "#himtamse";
+                env.dCol(); cout << " !" << endl;
+            }
+            /*if(env.args.size()){
                 if(env.dirt>env.maxDirt-2){
                     env.say("Désolé, mais c'est trop crade pour mettre de la couleur.");
                 }else{
@@ -213,6 +277,14 @@ int main(int argc, char *argv[]){
                 env.dCol(); cout << "ou bien ";
                 env.tCol(FOREGROUND_BLUE|FOREGROUND_INTENSITY); cout << "bleu ";
                 env.dCol(); cout << "en plus." << endl;
+            }*/
+        }else if(env.cmd=="download"){
+            string pF(env.args.getS("fichyer")); // Vous ne patherez pas
+            if(pF.size() && env.getWinPath(pF,true)){
+                //env.download(env.args.getS("aute"), env.args.getS("passe"), pF);
+                env.download(env.args.getS("url"), pF);
+            }else{
+                env.err("Kom c mal fé");
             }
         }else if(env.cmd=="makeclean"){
             env.sayRand({
@@ -235,7 +307,7 @@ int main(int argc, char *argv[]){
                     if(env.dirt==env.maxDirt){
                         env.stCol(FOREGROUND_INTENSITY);
                         env.say("J'ai fait du mieux qu'j'ai pu, mais ça va pas tiendrer longtemps.", F_SMS_NODISP);
-                    }else if(env.dirt>env.maxDirt-5){
+                    }else if(env.dirt+5>env.maxDirt){
                         env.darkenTxt();
                     }
                 }
@@ -245,7 +317,7 @@ int main(int argc, char *argv[]){
                 if(env.dirt==env.maxDirt){
                     env.stCol(FOREGROUND_INTENSITY);
                     env.say("J'ai fait du mieux qu'j'ai pu, mais ça va pas tiendrer longtemps.", F_SMS_NODISP);
-                }else if(env.dirt>env.maxDirt-5){
+                }else if(env.dirt+5>env.maxDirt){
                     env.darkenTxt();
                 }else
                     env.enlightTxt();
@@ -259,13 +331,101 @@ int main(int argc, char *argv[]){
             system("cls");
             return main(argc, argv);
         }else if(env.cmd=="ping" || env.cmd=="pong"){ // pOng en multi ? Ou param
-            system("CLS");
-            env.say("Veuillez patienter.", F_SMS_NODISP | F_SM_SYNC);
-            bool ballX(false), ballY(false);
-            unsigned char j1X, j2X;
-            //while(getchar!="ESC")
-            while(true){
+            // Si on spécifie une IP les raquettes deviennent l'IP. Une adresse est convertie en son IP, si ça marche.
+            if(winSize.X<30 || winSize.Y<30){
+                env.say("À l'époque de la haute définition, je suggère que vous vous achetiez un écran plus grand pour jouer à des jeux récents et décents.");
+            }else{
+                cout << "Bob l'éPong" << endl;
+                env.say("Veuillez patienter.", F_SM_SYNC);
+                SetConsoleTitle("Je compte pas, tu vas perdre.");
+                system("CLS");
+                sf::sleep(sf::milliseconds(1000+rand()%2000));
+                env.say("C'est tellement très le beaucoup bien que ça doit charger longtemps.", F_SMS_NODISP|F_SM_SYNC);
+                bool ballX(true), ballY(true);
+                unsigned short jH=winSize.Y/6, // Tailles raquette
+                    j1S(0), j2S(0); // Scores
+                float j1Y((winSize.Y-jH)/2), j2X(winSize.X-2), j2Y((winSize.Y-jH)/2), // Positions des raquettes
+                    step((float)winSize.Y/80.0f); // Vitesses balles et raquettes
+                sf::Vector2f ballPos(2.0f, (winSize.Y+jH)/2);
+                sf::Vector2i bP(2, (winSize.Y+jH)/2);
+                //while(getchar!="ESC")
 
+                sf::sleep(sf::seconds(0.5));
+                env.say("Profitez bien ! Appuyez sur échap quand vous en aurez marre au canards.", F_SMS_NODISP|F_SM_SYNC);
+
+                while(!sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+                    system("CLS");
+
+                    // Input
+                    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+                        j1Y-=step;
+                        if(j1Y<0) j1Y=0;
+                    }
+                    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+                        j1Y+=step;
+                        if(j1Y+jH>winSize.Y-1) j1Y=winSize.Y-jH;
+                    }
+
+                    // Compute
+                    ballPos.x+=step*(ballX?3:-3);
+                    ballPos.y+=step*(ballY?3:-3);
+
+                    bP.x=ballPos.x;
+                    bP.y=ballPos.y;
+                    if(ballX && bP.x>winSize.X-4){
+                        if(bP.x>=winSize.X){ // Un step trop grand et DTC
+                            MessageBeep(MB_ICONINFORMATION);
+                            // Relance, score...
+                            ballX=false;
+                            ballPos.x=winSize.X/2;
+                        }else if(bP.y>j2Y && bP.y<j2Y+2*jH){
+                            MessageBeep(MB_ICONERROR);
+                            ballX=false;
+                        }
+                    }else if(!ballX && bP.x<3){
+                        if(bP.x<0){
+                            MessageBeep(MB_ICONERROR);
+                            ballX=true;
+                            ballPos.x=winSize.X/2;
+                        }else if(bP.y>j1Y && bP.y<j1Y+jH){
+                            MessageBeep(MB_ICONINFORMATION);
+                            ballX=true;
+                        }
+                    }
+                    if(ballY && bP.y>=winSize.Y){
+                        ballPos.y=winSize.Y-1;
+                        ballY=false;
+                    }else if(!ballY && bP.y<0){
+                        ballPos.y=0;
+                        ballY=true;
+                    }
+
+                    if(ballX){
+                        // Jouer "narmolement"
+                        j2X=winSize.X-2;
+                        if(j2Y+jH<ballPos.y){
+                            j2Y+=3*step;
+                        }else{
+                            j2Y-=3*step;
+                        }
+                        if(j2Y<0) j2Y=0;
+                        if(j2Y+2*jH>winSize.Y-1) j2Y=winSize.Y-2*jH;
+
+                    }else if(ballPos.x>winSize.X/2){
+                        j2X=winSize.X-2;
+                    }else{
+                        j2X=rand()%(winSize.X/2-2)+winSize.X/2;
+                        j2Y=rand()%(winSize.Y-2*jH);
+                    }
+
+                    // Output
+                    drawVLine(winSize.X/2, 0, winSize.Y, '|');
+                    drawVLine(1, j1Y, jH, 'X'); // Surcharger si y'a l'IP.
+                    drawVLine(j2X, j2Y, 2*jH, '<'); // Surcharger si y'a l'IP.
+                    loc(ballPos.x, ballPos.y); cout << "O";
+
+                    sf::sleep(sf::seconds(1/10)); // J'ai parlé de HD, mais pas de haute fréquence hein.
+                }
             }
         }else if(env.cmd=="haylp"){
             if(env.helpnxt==HelpNext::Haylp){
@@ -307,7 +467,8 @@ int main(int argc, char *argv[]){
             system("color f8");
             env.sbCol(BACKGROUND_WHITE_INTENSITY);
         }else if(env.cmd=="cowsay"){
-            if(env.args.size()){
+            string phCow(env.args.getS("fraz"));
+            if(phCow.size()){
                 string meuhs[]={ // Système probabiliste hautes performances
                     "meuh", "meuh", "meuh",
                     "",
@@ -320,13 +481,14 @@ int main(int argc, char *argv[]){
                     "Je l'ai jamais vue autant causer !",
                     "C'est du patois charollais, vous pouvez pas comprendre."
                 };
-                string cowPhrase("Mais la vache. A dit");
-                for(size_t meuh=0;meuh<env.args.size();meuh++)
+                string cowPhrase("Mais la vache. A dit meuh");
+                //for(size_t meuh=0;meuh<env.args.size();meuh++)
+                for(size_t meuh=0;meuh<phCow.size()/10;meuh++)
                     cowPhrase+=" "+meuhs[rand()%9]; // Héhé, l'optimisation de s'arrêter à 9, comme ça y'a qu'un seul chiffre !
                 cowPhrase+=". En fait ça veut dire \"";
-                for(size_t mot=0;mot<env.args.size();mot++)
-                    cowPhrase+=" " + env.args[mot];
-                cowPhrase+=" \" " + comm[rand()%4];
+                /*for(size_t mot=0;mot<env.args.size();mot++)
+                    cowPhrase+=" " + env.args[mot];*/
+                cowPhrase+=phCow+"\". " + comm[rand()%4];
                 env.say(cowPhrase.c_str());
             }else{
                 env.say("Ben la vache elle a rien à dire en ce moment.");
@@ -497,7 +659,7 @@ int main(int argc, char *argv[]){
 
         // Reste à unifier les exécutables, ou balancer la commande dans le vide, si Windows le fait
         }else if(env.cmd=="exec"){
-            if(env.args.size()){
+            /*if(env.args.size()){
                 if(env.args[0]=="GraphicalShit"){
                     if(env.args.size()>1){
                         ShellExecute(NULL, "open", "preaugram/windob/GraphicalShit.exe" , env.args[1].c_str(), NULL, 0);
@@ -513,18 +675,43 @@ int main(int argc, char *argv[]){
                 cout << "Merci de spécifier un de vos exécutables, sans l'extension .exe" << endl;
                 cout << "Tapez ";
                 env.tCol(FOREGROUND_GREEN);
-                cout << "sl \"|preaugram|windob\"";
+                cout << "sl \"|preaugram|ksh\"";
                 env.dCol();
                 cout << " pour en voir la liste." << endl;
-            }
+            }*/
         }else if(env.cmd=="launch"){
-            if(env.args.size()){
+            /*if(env.args.size()){
                 ReturnedError ret;
                 ret=executeOutside(env.args[0]);
                 if(ret.isError){
                     cout << ret.errorMsg << (ret.winId?ret.errorMsg:"") << endl;
                 }
-            }
+            }else{
+                cout << "Merci de spécifier un de vos programmes instalés." << endl;
+                cout << "Tapez ";
+                env.tCol(FOREGROUND_GREEN);
+                cout << "sl \"|preaugram|windob\"";
+                env.dCol();
+                cout << " pour en voir la liste." << endl;
+            }*/
+        }else if(env.cmd=="system"){
+            string appName(env.args.getS("prg"))
+                , cmdLine(env.args.getS("cmd"));
+            if(appName.size()){
+                if(appName.find("\\")==string::npos && appName.find("/")==string::npos){
+                    if(cmdLine.size())
+                        appName+=" " + cmdLine;
+                    appName="\"trhuKaintern\\" + appName + '"';
+                    env.info("Launchinje " + appName);
+                    system(appName.c_str());
+                }else
+                    env.err("Il est interdit de naviguer dans les dossiers !");
+            }else
+                env.err("Vous n'avez pas spécifié de programme.");
+        // Raycupayray une haplikation :
+        // download +
+        // system("trhuKaintern\7za.exe e DLedFile.zip -i!pwet-release-master/preaugram/windob/* -opreaugram\windob\pwet"
+        // Se mettre d'accord sur le format, car ça ne gère pas les subfolders, c'est dégeuh.
 
         // Bonus
         }else if(env.cmd=="fss" || env.cmd=="fsf"){
@@ -567,6 +754,8 @@ int main(int argc, char *argv[]){
             env.tCol(FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
             cout << "*verse une larme*" << endl;
             env.dCol();
+        }else if(env.cmd=="shit"){
+            system("START \"\" \"%ProgramFiles%\\Skype\\Phone\\Skype.exe\" /B /SEPARATE");
         }else if(env.userName==env.cmd){
             cout << "Bravo, ça c'est ton nom d'utilisateur." << endl;
         // Si toLowerCase!=, "PAS LA PEINE DE GUEULER !" MAIS JE SUIS CALME MOI !
@@ -577,13 +766,20 @@ int main(int argc, char *argv[]){
 
     cout << "Quittance..." << endl;
     //env.say(phrasesFin[rand()%3], F_SM_SYNC);
-    env.sayRand({
-        "C'est triste que vous partiez déjà. Gertrude avait fait des patates.",
-        "Attention aux poules dans le champ derrière la ferme. Elles n'ont pas été traites.",
-        "De toutes façons je vous aimais pas.",
-        "Y'a pas le feu à le lac. Ah ben si en fait. Le canard, est pyromane.",
-        "Attention au tracteur, il s'entraîne pour le concours de beauté."
-    },F_SM_SYNC);
+    if(env.dirt+5>env.maxDirt){ // -5 fait un Wsign-compare
+        env.sayRand({
+            "T'aurais pu laver avant de partir.",
+            "Qui c'est qui va devoir tout laver encore ? C'est Gertrude !"
+        }, F_SM_SYNC);
+    }else{
+        env.sayRand({
+            "C'est triste que vous partiez déjà. Gertrude avait fait des patates.",
+            "Attention aux poules dans le champ derrière la ferme. Elles n'ont pas été traites.",
+            "De toutes façons je vous aimais pas.",
+            "Y'a pas le feu à le lac. Ah ben si en fait. Le canard, est pyromane.",
+            "Attention au tracteur, il s'entraîne pour le concours de beauté."
+        },F_SM_SYNC);
+    }
 
     return 0;
 }

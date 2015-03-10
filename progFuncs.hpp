@@ -30,7 +30,7 @@ ReturnedError executeInside(string name){
     }
 
     DWORD newErr;
-    if(newErr=GetLastError()){
+    if((newErr=GetLastError())){
         retErr.isError=true;
         retErr.winId=newErr;
         retErr.errorMsg="Windows est pas content. Il dit : ";
@@ -63,7 +63,7 @@ ReturnedError executeOutside(string name){
     }
 
     DWORD newErr;
-    if(newErr=GetLastError()){
+    if((newErr=GetLastError())){
         retErr.isError=true;
         retErr.winId=newErr;
         retErr.errorMsg="Windows est pas content. Il dit : ";

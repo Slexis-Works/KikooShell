@@ -5,15 +5,18 @@
 #include <wininet.h>
 #include <vector>
 #include <string>
+#include <regex>
 #include <random>
 #include <time.h>
 #include <sstream>
 #include <fstream>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
+#include <curl/curl.h>
 
 #include "mainStructs.hpp"
-
+#include "save.hpp"
+#include "curlBkps.hpp"
 
 //#include "son.hpp"
 
@@ -23,9 +26,43 @@ public:
     ~Env();
 
     // Fonctions utilitaires du KSh
-    bool addPath(string &nP);
+    // CWD
+    bool addPath(string &nP, bool isFile=0);
+    string getWinPath();
+    bool getWinPath(string &nP, bool isFile=0);
+    // CMD
+    void resetFlags(){m_flags1.clear();m_flagsWords.clear();args.clear();}
+    bool addFlag1(char nF){
+        string test;
+        test+=nF;
+        if(hasFlag(nF)){
+            warn("Koman ke ta déjah mee leu char " + test);
+            return false;
+        }else{
+            m_flags1+=nF;
+            //info("Flhag ajoo t : " + test);
+            return true;
+        }
+    }
+    bool addFlag(string nF){
+        if(hasFlag(nF)){
+            err("Koman ke ta déjah mee " + nF);
+            return false;
+        }else{
+            //info("Hargumam troo v : " + nF);
+            m_flagsWords.push_back(nF);
+            return true;
+        }
+    }
+    void addPair(string name, string value){/*info("Hajoo dhu paramaytr " + name + " kiveau " + value);*/args.setOpt(name, value);} // Le void fait tâche...
+
+    bool hasFlag(char flag){return !(m_flags1.find(flag)==string::npos);}
+    bool hasFlag(string flag){return (find(m_flagsWords.begin(), m_flagsWords.end(), flag)!=m_flagsWords.end());}
+
+
 
     // I/O
+    // Screen I/O
     // Couleurs t=text b=background
     // s=set (comme défaut aussi) d=default (remet la valeur par défaut)
     void tCol(Flags flags){     SetConsoleTextAttribute(cO, m_bgCol|(flags&15));} // Ou récupérer TextAttribute
@@ -45,7 +82,15 @@ public:
     void darkenTxt(){m_txtCol&=~FOREGROUND_INTENSITY;dCol();}
     void enlightTxt(){m_txtCol|=FOREGROUND_INTENSITY;dCol();}
 
+    // Pourrait retourner false pour faire return err(); sans accolades
     void err(string msg){Col(FOREGROUND_RED|FOREGROUND_INTENSITY|BACKGROUND_BLUE); cout << msg << endl; dCol();}
+    void warn(string msg){Col(FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_INTENSITY|BACKGROUND_RED); cout << msg << endl; dCol();}
+    void info(string msg){Col(FOREGROUND_BLUE|FOREGROUND_INTENSITY|BACKGROUND_WHITE); cout << msg << endl; dCol();}
+
+    // Files I/O
+    bool download(string host, string path, string fileName, Flags fl=0); // proposer une surcharge qui gère automatiquement le nom avec un hash
+    bool download(string url, string pathFile, Flags fl=0); // proposer une surcharge qui gère automatiquement le nom avec un hash
+    //size_t saveDL(char *data, size_t taille, size_t nmemb, void *stream);
 
     // Son
     bool play(string path, sf::Uint8 flags=0); // 8 flags, flags étendus et privés pour say
@@ -60,25 +105,35 @@ public:
 
 // Variables publiques pour simplifier l'accès
     // Nécessaires à l'interface
-    HANDLE cO;
     HANDLE cI;
+    HANDLE cO;
 
     // Nécessaires au fonctionnement interne
     string cmd; // Dernière commande tapée...
-    vector<string> args; // Et ses params
+    string fcmd; // Full command
+    string fparams; // Full params
+    Save args;
+
+    //vector<string> args; // Et ses params
 
     HelpNext helpnxt;
 
     // Paramètres utilisateurs
     string userName;
     string cwd;
-    unsigned char dirt;
+    unsigned long dirt; // Comme ça les pégus ne profiteront pas du bug de l'overflow. Ou ce sont des no-lifes.
     unsigned char maxDirt;
 
 private:
     // I/O
     unsigned char m_txtCol;
     unsigned char m_bgCol;
+
+    string m_dlFile;
+
+    string m_flags1; // Flags mono : @ car séquence random de caractères
+    vector<string> m_flagsWords; // Flags normaux : # car mots normaux
+    //vector<pair<string, stringstream>> m_flagsPair; // Flags couples nom/valeur : &nom=valeur car y'en a 2
 
     // Sound
     string m_voice;
